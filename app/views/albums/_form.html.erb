@@ -1,0 +1,62 @@
+<%= form_with(model: album) do |form| %>
+  <% if album.errors.any? %>
+    <div style="color: red">
+      <h2><%= pluralize(album.errors.count, "error") %> prohibited this album from being saved:</h2>
+
+      <ul>
+        <% album.errors.each do |error| %>
+          <li><%= error.full_message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div>
+    <%= form.label :name, style: "display: block" %>
+    <%= form.text_field :name %>
+  </div>
+
+  <div>
+    <%= form.label :description, style: "display: block" %>
+    <%= form.textarea :description %>
+  </div>
+
+  <div>
+    <%= form.label :unit_price, style: "display: block" %>
+    <%= form.text_field :unit_price %>
+  </div>
+
+  <div>
+    <%= form.label :stock_available, style: "display: block" %>
+    <%= form.number_field :stock_available %>
+  </div>
+
+  <div>
+    <%= form.label :category, style: "display: block" %>
+    <%= form.text_field :category %>
+  </div>
+
+  <div>
+    <%= form.label :media_type, style: "display: block" %>
+    <%= form.text_field :media_type %>
+  </div>
+
+  <div>
+    <%= form.label :condition_is_new, style: "display: block" %>
+    <%= form.checkbox :condition_is_new %>
+  </div>
+
+  <div>
+    <%= form.label :author_id, style: "display: block" %>
+    <%= form.text_field :author_id %>
+  </div>
+
+  <div>
+    <%= form.label :deleted_at, style: "display: block" %>
+    <%= form.date_field :deleted_at %>
+  </div>
+
+  <div>
+    <%= form.submit %>
+  </div>
+<% end %>

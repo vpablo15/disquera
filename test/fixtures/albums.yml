@@ -1,0 +1,23 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  name: MyString
+  description: MyText
+  unit_price: 9.99
+  stock_available: 1
+  category: MyString
+  media_type: MyString
+  condition_is_new: false
+  author: one
+  deleted_at: 2025-11-27
+
+two:
+  name: MyString
+  description: MyText
+  unit_price: 9.99
+  stock_available: 1
+  category: MyString
+  media_type: MyString
+  condition_is_new: false
+  author: two
+  deleted_at: 2025-11-27
