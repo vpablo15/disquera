@@ -1,0 +1,19 @@
+version: '3.8'
+
+services:
+  sqlite_web:
+    image: coleifer/sqlite-web:latest
+    container_name: sqlite-web-browser
+    restart: unless-stopped
+    ports:
+      # Acceso web: http://localhost:8080
+      - "8080:8080"
+    volumes:
+      # 1. Mapea tu carpeta de datos local a la carpeta interna /data
+      - ./storage:/data
+
+    environment:
+      # 2. Especifica el nombre del archivo de base de datos.
+      #    El contenedor lo buscará dentro de la carpeta /data (el volumen mapeado).
+      #    >>> Reemplaza 'mi_aplicacion.db' por tu nombre de archivo. <<<
+      SQLITE_DATABASE: development.sqlite3
