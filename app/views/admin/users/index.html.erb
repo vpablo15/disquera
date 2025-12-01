@@ -5,7 +5,7 @@
     <i class="fas fa-users me-2"></i> Listado de Usuarios
   </h2>
   <%= link_to "Crear Nuevo Usuario",
-    new_user_registration_path, # Usamos la ruta de registro de Devise como ejemplo
+    new_user_registration_path,
     class: "btn btn-primary" %>
 </div>
 
@@ -40,15 +40,15 @@
                 class: "btn btn-sm btn-info me-1" %>
 
               <%= link_to "Editar",
-                edit_user_registration_path(user.id),
+                edit_user_registration_path(user),
                 class: "btn btn-sm btn-warning me-1" %>
 
               <%= link_to "Eliminar",
-                user_registration_path(user), # ⬅️ Usamos la ruta de eliminación de Devise como ejemplo
+                admin_user_path(user.id),
                 data: {
                   turbo_method: :delete,
                   turbo_confirm: "¿Estás seguro de que quieres eliminar a
-#{user.email}?",
+#{user.email} y #{user.id}?",
                 },
                 class: "btn btn-sm btn-danger" %>
             </td>
