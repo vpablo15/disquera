@@ -4,7 +4,7 @@ Rails.application.routes.draw do
 
   namespace :admin do
     root "admin#home"
-    resources :users, only: [:index, :destroy]
+    resources :users, only: [:index, :destroy, :update, :edit]
   end
 
   # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.
@@ -16,5 +16,4 @@ Rails.application.routes.draw do
   # get "service-worker" => "rails/pwa#service_worker", as: :pwa_service_worker
 
   # Defines the root path route ("/")
-  # root "posts#index"
 end

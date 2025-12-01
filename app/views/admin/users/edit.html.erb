@@ -1,0 +1,40 @@
+<% content_for :admin_content do %>
+  <h2>Editar Cuenta de Administrador para <%= @user.email %></h2>
+
+  <%= form_with(model: @user, url: admin_user_path(@user), local: true) do |form| %>
+
+    <%= render "shared/error_display", resource: form.object %>
+
+    <h3>Información Sensible (Devise)</h3>
+
+    <div class="field">
+      <%= form.label :email %>
+      <%= form.email_field :email, autocomplete: "off" %>
+    </div>
+
+    <div class="field">
+      <%= form.label :password %>
+      <p class="help-text">Deja en blanco si no quieres cambiarla.</p>
+      <%= form.password_field :password, autocomplete: "new-password" %>
+    </div>
+
+    <div class="field">
+      <%= form.label :password_confirmation %>
+      <%= form.password_field :password_confirmation, autocomplete: "new-password" %>
+    </div>
+
+    <hr>
+
+    <h3>Información de Administración</h3>
+
+<!--    <div class="field">-->
+      <%#= form.label :role %>
+      <%# Asumiendo que 'role' es un enum o un campo de texto %>
+      <%#= form.text_field :role %>
+<!--    </div>-->
+
+    <div class="actions">
+      <%= form.submit "Actualizar Usuario" %>
+    </div>
+  <% end %>
+<% end %>
