@@ -1,4 +1,6 @@
 
+<%= render template: "layouts/application" %>
+
 <div class="d-flex flex-column vh-100">
 
   <!-- HEADER (Barra de Navegación Fija) -->
@@ -34,7 +36,9 @@
       <div class="list-group list-group-flush">
 
         <!-- Acción 1: Listar Usuarios -->
-        <%= link_to "#", class: "list-group-item list-group-item-action py-2" do %>
+        <%= link_to admin_users_path, class: "list-group-item
+        list-group-item-action
+        py-2" do %>
           <i class="fas fa-users me-2"></i> Listar Usuarios
         <% end %>
 
@@ -62,11 +66,10 @@
     <!-- CONTENIDO ESPECÍFICO DE LA VISTA (EL YIELD) -->
     <main class="flex-grow-1 p-4 bg-white overflow-auto">
       <!-- 🟢 Aquí se renderizará el contenido de tus VISTAS (ej. la lista de usuarios) 🟢 -->
-      <%= yield %>
+      <%= yield :admin_content %>
 
     </main>
 
   </div>
 </div>
 
-<%= render template: "layouts/application" %>
