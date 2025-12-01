@@ -30,23 +30,7 @@
 
   <body>
 
-  <div class="position-fixed top-0 start-50 translate-middle-x p-3 w-75" style="z-index: 1050;">
-
-    <% if notice %>
-      <div class="alert alert-success alert-dismissible fade show" role="alert">
-        <%= notice %>
-        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-      </div>
-    <% end %>
-
-    <% if alert %>
-      <div class="alert alert-danger alert-dismissible fade show" role="alert">
-        <%= alert %>
-        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-      </div>
-    <% end %>
-
-  </div>
+  <%= render "shared/alert_display"%>
 
   <%= yield %>
 
