@@ -10,6 +10,11 @@ es:
       already_confirmed: "ya fue confirmado/a, por favor intenta iniciar sesión"
       not_found: "no encontrado/a"
 
+  # cancancan messages
+  unauthorized:
+    manage:
+      all: "No cuenta con los permisos realizar la acción solicitada."
+
   activerecord:
 
     attributes:
@@ -34,6 +39,3 @@ es:
         user:
           one: Usuario
           other: Usuarios
-
-# 💡 Recuerda que debes tener la sección 'devise:' con las traducciones
-#    de los mensajes flash (signed_in, signed_out, etc.) también en este archivo.
