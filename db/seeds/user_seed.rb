@@ -9,13 +9,13 @@ NUM_TEST_USERS = 10
 admin_user = User.find_or_create_by!(email: ADMIN_EMAIL) do |user|
   user.password = COMMON_PASSWORD
   user.password_confirmation = COMMON_PASSWORD
-  user.role = User.role[:admin]
+  user.role = User.roles[:admin]
 end
 
 manager_user = User.find_or_create_by!(email: MANAGER_EMAIL) do |user|
   user.password = COMMON_PASSWORD
   user.password_confirmation = COMMON_PASSWORD
-  user.role = User.role[:manager]
+  user.role = User.roles[:manager]
 end
 
 NUM_TEST_USERS.times do |i|
