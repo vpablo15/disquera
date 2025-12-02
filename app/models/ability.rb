@@ -24,14 +24,10 @@ class Ability
   def can_manager(user)
     # can :manage, Product
     # can :manage, Sale
+    can [:destroy, :delete, :index], User, role: User.roles.values - [User
+      .roles[:admin]]
 
-    can :manage, User
-    cannot :update, User, [:role]
-    cannot :create, User
 
-    # Restricción: No puede crear o actualizar usuarios si el rol es 'admin'
-    cannot [ :update ], User do |target_user| target_user.admin?
-    end
   end
 
   def can_employee(user)
