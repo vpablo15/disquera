@@ -28,6 +28,7 @@ class Ability
     can :manage, User
     cannot :update, User, [:role]
     cannot :create, User
+
     # Restricción: No puede crear o actualizar usuarios si el rol es 'admin'
     cannot [ :update ], User do |target_user| target_user.admin?
     end
@@ -40,7 +41,7 @@ class Ability
   end
 
   def can_all_users(user)
-    can [ :read, :update ], User, id: user.id
+    can [ :show, :update ], User, id: user.id
     cannot :update, User, :role
   end
 end
