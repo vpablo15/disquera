@@ -5,6 +5,7 @@ class Users::RegistrationsController < Devise::RegistrationsController
   # before_action :configure_account_update_params, only: [:update]
 
   skip_before_action :require_no_authentication, only: [:new, :create]
+  authorize_resource class: 'User', only: [:new, :create]
 
   # GET /resource/sign_up
   # def new
