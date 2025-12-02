@@ -4,8 +4,8 @@ class Admin::UsersController < ApplicationController
 
   layout "admin"
   before_action :authenticate_user!
-
   before_action :set_user, only: [:destroy, :edit, :update]
+  load_and_authorize_resource
 
   def index
     @users = User.all
