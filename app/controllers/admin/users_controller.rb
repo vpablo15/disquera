@@ -1,0 +1,63 @@
+# app/controllers/admin/users_controller.rb
+
+class Admin::UsersController < ApplicationController
+
+  layout "admin"
+
+  before_action :set_user, only: [:destroy, :edit, :update]
+
+  def index
+    @users = User.all
+  end
+
+  def show
+    @user = User.find(params[:id])
+  end
+
+  def update
+    user_data = user_params
+
+    if user_data[:password].blank? && user_data[:password_confirmation].blank?
+      user_data.delete(:password)
+      user_data.delete(:password_confirmation)
+    end
+    if @user.update(user_data)
+      redirect_to admin_users_path, notice: "El usuario #{@user.email} fue
+actualizado
+correctamente."
+    else
+      # Si falla la validación, vuelve al formulario de edición, mostrando
+      # los errores por el status de error
+      render :edit, status: :unprocessable_entity
+    end
+  end
+
+  def user_params
+    params.require(:user).permit(:email, :password, :password_confirmation)
+  end
+
+  def edit
+  end
+
+  def destroy
+    if @user == current_user
+      redirect_to admin_users_path, alert: "No puedes eliminar tu propia cuenta de administrador."
+      return
+    end
+
+    if @user.destroy
+      redirect_to admin_users_path, notice: "El usuario #{@user.email} ha sido eliminado con éxito."
+    else
+      redirect_to admin_users_path, alert: "No se pudo eliminar al usuario."
+    end
+  end
+
+  private
+
+  # Hook para recuperar el usuario cuando se recibe el id por parámetro
+  def set_user
+    @user = User.find(params[:id])
+    rescue ActiveRecord::RecordNotFound
+      redirect_to admin_users_path, alert: "Usuario no encontrado."
+    end
+end

@@ -1,4 +1,5 @@
-class AuthorsController < ApplicationController
+class Admin::AuthorsController < ApplicationController
+  layout "admin"
   before_action :set_author, only: %i[ show edit update destroy ]
 
   # GET /authors or /authors.json
@@ -25,7 +26,7 @@ class AuthorsController < ApplicationController
 
     respond_to do |format|
       if @author.save
-        format.html { redirect_to @author, notice: "Author was successfully created." }
+        format.html { redirect_to admin_author_path(@author), notice: "Author was successfully created." }
         format.json { render :show, status: :created, location: @author }
       else
         format.html { render :new, status: :unprocessable_entity }
@@ -38,7 +39,7 @@ class AuthorsController < ApplicationController
   def update
     respond_to do |format|
       if @author.update(author_params)
-        format.html { redirect_to @author, notice: "Author was successfully updated.", status: :see_other }
+        format.html { redirect_to admin_author_path(@author), notice: "Author was successfully updated.", status: :see_other }
         format.json { render :show, status: :ok, location: @author }
       else
         format.html { render :edit, status: :unprocessable_entity }
@@ -52,7 +53,7 @@ class AuthorsController < ApplicationController
     @author.destroy!
 
     respond_to do |format|
-      format.html { redirect_to authors_path, notice: "Author was successfully destroyed.", status: :see_other }
+      format.html { redirect_to admin_authors_path, notice: "Author was successfully destroyed.", status: :see_other }
       format.json { head :no_content }
     end
   end

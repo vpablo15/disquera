@@ -1,0 +1,14 @@
+<% content_for :admin_content do %>
+<% content_for :title, "Editing album" %>
+
+<h1>Editing album</h1>
+
+<%= render "form", album: @album %>
+
+<br>
+
+<div>
+  <%= link_to "Show this album", admin_album_path(@album) %> |
+  <%= link_to "Back to albums", admin_albums_path %>
+</div>
+<% end %>

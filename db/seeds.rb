@@ -7,3 +7,10 @@
 #   ["Action", "Comedy", "Drama", "Horror"].each do |genre_name|
 #     MovieGenre.find_or_create_by!(name: genre_name)
 #   end
+
+
+# Load and execute each file in the 'db/seeds/' folder
+Dir[Rails.root.join('db', 'seeds', '*.rb')].sort.each do |file|
+  puts "Ejecutando #{File.basename(file)}..."
+  load file
+end

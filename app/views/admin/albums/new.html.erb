@@ -1,3 +1,4 @@
+<% content_for :admin_content do %>
 <% content_for :title, "New album" %>
 
 <h1>New album</h1>
@@ -7,5 +8,6 @@
 <br>
 
 <div>
-  <%= link_to "Back to albums", albums_path %>
+  <%= link_to "Back to albums", admin_albums_path %>
 </div>
+<% end %>
