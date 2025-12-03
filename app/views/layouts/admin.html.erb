@@ -1,0 +1,74 @@
+
+<%= render template: "layouts/application" %>
+
+<div class="d-flex flex-column vh-100">
+
+  <!-- HEADER (Barra de Navegación Fija) -->
+  <header class="d-flex justify-content-between align-items-center shadow-sm p-3 bg-dark text-white sticky-top">
+    <h1 class="h4 mb-0">
+      <i class="fas fa-tachometer-alt me-2"></i> Panel de Administración
+    </h1>
+
+    <% if user_signed_in? %>
+      <div class="d-flex align-items-center">
+        <span class="text-white me-3 small">
+          Conectado como: <strong><%= current_user.email %></strong>
+        </span>
+        <%= link_to "Cerrar Sesión",
+          destroy_user_session_path,
+          data: { turbo_method: :delete, turbo_confirm: "¿Estás seguro de que quieres cerrar sesión?" },
+          class: "btn btn-outline-light btn-sm" %>
+      </div>
+    <% else %>
+      <div>
+        <%= link_to "Iniciar Sesión", new_user_session_path, class: "btn btn-outline-light btn-sm me-2" %>
+        <%= link_to "Registrarse", new_user_registration_path, class: "btn btn-success btn-sm" %>
+      </div>
+    <% end %>
+  </header>
+
+  <!-- CONTENIDO PRINCIPAL Y BARRA LATERAL (Usa Flexbox para Side-by-Side) -->
+  <div class="d-flex flex-grow-1">
+
+    <!-- BARRA LATERAL (SIDEBAR) -->
+    <nav class="bg-light shadow-sm p-3" style="width: 250px; flex-shrink: 0;">
+      <h6 class="text-uppercase text-muted mb-3 mt-1 small">Gestión</h6>
+      <div class="list-group list-group-flush">
+
+        <!-- Acción 1: Listar Usuarios -->
+        <%= link_to admin_users_path, class: "list-group-item
+        list-group-item-action
+        py-2" do %>
+          <i class="fas fa-users me-2"></i> Listar Usuarios
+        <% end %>
+
+        <!-- Acción 2: Listar Productos -->
+        <%= link_to "#", class: "list-group-item list-group-item-action py-2" do %>
+          <i class="fas fa-box-open me-2"></i> Listar Productos
+        <% end %>
+
+        <!-- Acción 3: Gestionar Ventas -->
+        <%= link_to "#", class: "list-group-item list-group-item-action py-2" do %>
+          <i class="fas fa-chart-line me-2"></i> Gestionar Ventas
+        <% end %>
+
+      </div>
+
+      <h6 class="text-uppercase text-muted mb-3 mt-4 small">Configuración</h6>
+      <div class="list-group list-group-flush">
+        <%= link_to "#", class: "list-group-item list-group-item-action py-2" do %>
+          <i class="fas fa-cog me-2"></i> Ajustes
+        <% end %>
+      </div>
+
+    </nav>
+
+
+    <main class="flex-grow-1 p-4 bg-white overflow-auto">
+      <%= yield :admin_content %>
+
+    </main>
+
+  </div>
+</div>
+
