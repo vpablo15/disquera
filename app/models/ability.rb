@@ -21,13 +21,13 @@ class Ability
   def can_admin(user)
     can :manage, :all
   end
+
   def can_manager(user)
     # can :manage, Product
     # can :manage, Sale
-    can [:destroy, :delete, :index], User, role: User.roles.values - [User
-      .roles[:admin]]
-
-
+    can :manage, User
+    cannot [ :destroy, :delete, :index, :create ], User, role: User
+      .roles[:admin]
   end
 
   def can_employee(user)
