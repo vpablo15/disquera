@@ -22,7 +22,7 @@
             <%= f.label :password, class: "form-label" %>
             <% if @minimum_password_length %>
               <em class="text-muted small ms-2">(<%= @minimum_password_length %> caracteres mínimo)</em>
-            <% end %><br />
+            <% end %>
             <%= f.password_field :password,
               autocomplete: "new-password",
               class: "form-control" %>
@@ -34,6 +34,23 @@
               autocomplete: "new-password",
               class: "form-control" %>
           </div>
+
+          <div class="mb-3">
+            <%= f.label :role, "Selecciona tu Rol", class: "form-label" %>
+            <%
+              allowed_roles = User.roles.keys.select do |k|
+                can? :create, User.new(role: User.roles[k])
+              end
+              select_options = allowed_roles.map { |k| [k.humanize, k] }
+            %>
+
+            <%= f.select :role,
+              select_options,
+              { selected: resource.role || :basic },
+              { class: "form-select" }
+            %>
+          </div>
+
 
           <div class="d-grid gap-2 mt-4">
             <%= f.submit "Registrarse", class: "btn btn-success btn-lg" %>

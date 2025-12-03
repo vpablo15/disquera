@@ -71,8 +71,10 @@
 
       <h6 class="text-uppercase text-muted mb-3 mt-4 small">Configuración</h6>
       <div class="list-group list-group-flush">
-        <%= link_to "#", class: "list-group-item list-group-item-action py-2" do %>
-          <i class="fas fa-cog me-2"></i> Ajustes
+        <%= link_to edit_admin_user_path(current_user), class: "list-group-item
+        list-group-item-action
+        py-2" do %>
+          <i class="fas fa-cog me-2"></i> Editar Perfil
         <% end %>
       </div>
 

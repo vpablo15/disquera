@@ -27,13 +27,23 @@
             <%= form.password_field :password_confirmation, autocomplete: "new-password", class: "form-control" %>
           </div>
 
-          <hr class="my-4">
+          <% if can? :change_role, form.object %>
+            <div class="mb-3">
+              <%= form.label :role, "Selecciona tu Rol", class: "form-label" %>
+              <%
+                allowed_roles = User.roles.keys.select do |k|
+                  can? :create, User.new(role: User.roles[k])
+                end
+                select_options = allowed_roles.map { |k| [k.humanize, k] }
+              %>
 
-          <h3 class="border-bottom pb-2 mb-3 text-primary">Información de Administración</h3>
-
-          <div class="mb-3">
-            <p class="text-muted">No hay campos adicionales de administración definidos en este formulario.</p>
-          </div>
+              <%= form.select :role,
+                select_options,
+                { selected: form.object.role || :basic },
+                { class: "form-select" }
+              %>
+            </div>
+          <% end %>
 
           <div class="d-grid gap-2">
             <%= form.submit "Actualizar Usuario", class: "btn btn-primary btn-lg" %>
