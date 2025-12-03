@@ -17,4 +17,15 @@ class ApplicationController < ActionController::Base
     # allow additional parameters for account update
     devise_parameter_sanitizer.permit(:account_update, keys: [:role])
   end
+
+  # Redirect to login (gem devise), resource is the current_user
+  def after_sign_in_path_for(resource)
+    if resource.admin?
+      admin_users_path # Asumiendo que tienes esta ruta definida
+    elsif resource.manager?
+      admin_users_path
+    else
+      admin_root_path
+    end
+  end
 end
