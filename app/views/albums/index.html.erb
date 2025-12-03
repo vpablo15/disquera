@@ -55,7 +55,7 @@
     </div>
   <% end %>
 
-  <div id="albums" class="d-flex justify-content-center">
+  <div id="albums" class="d-flex justify-content-center flex-wrap">
     <% @albums.each do |album| %>
       <div class="card m-2" style="width: 18rem;">
         <% cover_image = album.images.find_by(is_cover: true) %>
@@ -64,7 +64,7 @@
           <% # 2. Usa image_tag con el método 'photo' definido en el modelo Image %>
           <%= image_tag cover_image.photo, class:"card-img-top" %> 
         <% else %>
-          <p>Portada no disponible.</p>
+          <%= image_tag "no_image.jpg", alt: "Imagen no disponible", class:"card-img-top" %>
         <% end %>
         <div class="card-body">
           <h5 class="card-title mb-1"><%= album.name %></h5>

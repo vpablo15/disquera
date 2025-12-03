@@ -1,10 +1,76 @@
 <% content_for :front_content do %>
-  <p style="color: green"><%= notice %></p>
 
-  <%= render @album %>
+  <div class="container d-flex flex-column align-items-center p-2">
+    <div class="w-50">
+      <%= link_to "Volver", albums_path, class:"btn btn-light mb-3 border border-secondary" %>
+    </div>
+    <% cover_image = @album.images.find_by(is_cover: true) %>
+    <% if cover_image&.photo&.attached? %>
+      <% # 2. Usa image_tag con el método 'photo' definido en el modelo Image %>
+      <%= image_tag cover_image.photo, class:"w-50 rounded" %> 
+    <% else %>
+      <%= image_tag "no_image.jpg", alt: "Imagen no disponible", class:"w-50 rounded" %>
+    <% end %>
+    
+    <div class="d-flex flex-column w-50 fs-5">
+      <div>
+        <strong>Nombre:</strong>
+        <p class="px-2"><%= @album.name %></p>
+      </div>
 
-  <div>
-    <%= link_to "Back to albums", albums_path %>
+      <div>
+        <strong>Descripción:</strong>
+        <p class="px-2"><%= @album.description %></p>
+      </div>
 
-  </div>
+      <div>
+        <strong>Precio Unitario:</strong>
+        <p class="px-2"><%= @album.unit_price %></p>
+      </div>
+
+      <div>
+        <strong>Stock Disponible:</strong>
+        <p class="px-2"><%= @album.stock_available %></p>
+      </div>
+
+      <div>
+        <strong>Artista:</strong>
+        <p class="px-2"><%= @album.author.full_name %></p>
+      </div>
+
+      <div>
+        <strong>Género:</strong>
+        <p class="px-2"><%= @album.genre.name %></p>
+      </div>
+
+      <div>
+        <strong>Año:</strong>
+        <p class="px-2"><%= @album.year %></p>
+      </div>
+
+      <div>
+        <strong>Formato:</strong>
+        <p class="px-2"><%= @album.media_type_before_type_cast %></p>
+      </div>
+
+      <div>
+        <strong>Estado:</strong>
+        <p class="px-2"><%= @album.condition_is_new ? "Nuevo" : "Usado" %></p>
+      </div>
+    </div>
+
+    <% if !@album.condition_is_new?%>
+      <% @audio = @album.audio %>
+      <% if @album.audio&.clip&.attached? %>
+        <h3 class="fs-4 fw-bold">Reproducir Muestra</h3>
+        <audio controls>
+          <source src="<%= rails_blob_url(@album.audio.clip) %>" type="<%= @album.audio.clip.content_type %>">
+          Tu navegador no soporta la reproducción de audio.
+        </audio>
+      <% else %>
+        <p>El clip de audio no está disponible para este álbum.</p>
+      <% end %>
+    <% end %>
+    </div>
+    
 <% end %>
