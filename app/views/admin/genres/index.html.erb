@@ -1,0 +1,18 @@
+<% content_for :admin_content do %>
+<p style="color: green"><%= notice %></p>
+
+<% content_for :title, "Genres" %>
+
+<h1>Genres</h1>
+
+<div id="genres">
+  <% @genres.each do |genre| %>
+    <%= render genre %>
+    <p>
+      <%= link_to "Show this genre", admin_genre_path(genre) %>
+    </p>
+  <% end %>
+</div>
+
+<%= link_to "New genre", new_admin_genre_path %>
+<% end %>

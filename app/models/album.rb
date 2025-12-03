@@ -1,36 +1,9 @@
 class Album < ApplicationRecord
   # Relaciones
   belongs_to :author
+  belongs_to :genre
   has_many :images, dependent: :destroy # Las imágenes se borran si el disco se borra
   has_one :audio, dependent: :destroy # El audio se borra si el disco se borra
-
-  # Atributo: Categoría (Género Musical)
-  enum :category, {
-    pop: "Pop",
-    rock: "Rock",
-    hip_hop: "Hip Hop",
-    rap: "Rap",
-    jazz: "Jazz",
-    blues: "Blues",
-    country: "Country",
-    folk: "Folk",
-    clasic: "Clásica",
-    opera: "Ópera",
-    disco: "Disco",
-    techno: "Techno",
-    reggaeton: "Reggaetón",
-    salsa: "Salsa",
-    merengue: "Merengue",
-    cumbia: "Cumbia",
-    trap: "Trap",
-    punk: "Punk",
-    heavy_metal: "Heavy Metal",
-    rock_indie: "Rock Indie",
-    reggae: "Reggae",
-    ska: "Ska",
-    tango: "Tango",
-    ambient: "Música Ambiental"
-  }
 
   # Atributo: Tipo (Vinilo o CD)
   enum :media_type, {

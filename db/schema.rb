@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2025_11_30_032417) do
+ActiveRecord::Schema[8.1].define(version: 2025_12_03_001637) do
   create_table "active_storage_attachments", force: :cascade do |t|
     t.bigint "blob_id", null: false
     t.datetime "created_at", null: false
@@ -41,17 +41,18 @@ ActiveRecord::Schema[8.1].define(version: 2025_11_30_032417) do
 
   create_table "albums", force: :cascade do |t|
     t.integer "author_id", null: false
-    t.string "category"
     t.boolean "condition_is_new"
     t.datetime "created_at", null: false
     t.date "deleted_at"
     t.text "description"
+    t.integer "genre_id", null: false
     t.string "media_type"
     t.string "name"
     t.integer "stock_available"
     t.decimal "unit_price"
     t.datetime "updated_at", null: false
     t.index ["author_id"], name: "index_albums_on_author_id"
+    t.index ["genre_id"], name: "index_albums_on_genre_id"
   end
 
   create_table "audios", force: :cascade do |t|
@@ -64,6 +65,12 @@ ActiveRecord::Schema[8.1].define(version: 2025_11_30_032417) do
   create_table "authors", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.string "full_name"
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "genres", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.string "name"
     t.datetime "updated_at", null: false
   end
 
@@ -93,6 +100,7 @@ ActiveRecord::Schema[8.1].define(version: 2025_11_30_032417) do
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "albums", "authors"
+  add_foreign_key "albums", "genres"
   add_foreign_key "audios", "albums"
   add_foreign_key "images", "albums"
 end

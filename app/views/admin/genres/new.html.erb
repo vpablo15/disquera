@@ -1,0 +1,13 @@
+<% content_for :admin_content do %>
+<% content_for :title, "New genre" %>
+
+<h1>New genre</h1>
+
+<%= render "form", genre: @genre %>
+
+<br>
+
+<div>
+  <%= link_to "Back to genres", admin_genres_path %>
+</div>
+<% end %>
