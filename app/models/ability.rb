@@ -16,6 +16,8 @@ class Ability
     elsif user.employee?
       can_employee(user)
     end
+
+    cannot :change_role, User, id: user.id
   end
 
   def can_admin(user)
@@ -28,6 +30,7 @@ class Ability
     can :manage, User
     cannot [ :destroy, :delete, :index, :create ], User, role: User
       .roles[:admin]
+    cannot :update, User, :role
   end
 
   def can_employee(user)
@@ -38,6 +41,5 @@ class Ability
 
   def can_all_users(user)
     can [ :show, :update ], User, id: user.id
-    cannot :update, User, :role
   end
 end
