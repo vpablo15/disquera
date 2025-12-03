@@ -1,0 +1,15 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  sale_date: 2025-11-30 21:24:57
+  buyer_name: MyString
+  buyer_contact: MyString
+  total: 9.99
+  status: MyString
+
+two:
+  sale_date: 2025-11-30 21:24:57
+  buyer_name: MyString
+  buyer_contact: MyString
+  total: 9.99
+  status: MyString
