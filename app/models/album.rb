@@ -14,7 +14,7 @@ class Album < ApplicationRecord
   # Validaciones (para cumplir con los requisitos rgexp, float positivo, etc.)
   validates :name, presence: true, length: { minimum: 2 }
   validates :unit_price, numericality: { greater_than_or_equal_to: 0 }
-  validates :stock_available, numericality: { only_integer: true, greater_than_or_equal_to: 0 }
+  validates :stock_available, :year, numericality: { only_integer: true, greater_than_or_equal_to: 0 }
 
   # Scope para Soft Delete
   default_scope { where(deleted_at: nil) }

@@ -58,6 +58,7 @@ albums_data = [
     stock_available: 500,
     description: "El álbum más vendido de todos los tiempos.",
     track_count: 9,
+    condition_is_new: false,
     cover_file: 'thriller_cover.jpg', # Archivo de portada SÍ existe
     audio_file: 'thriller_audio.mp3'# SÍ tiene canciones
   },
@@ -71,6 +72,7 @@ albums_data = [
     stock_available: 300,
     description: "Un tributo al ex vocalista Bon Scott.",
     track_count: 10,
+    condition_is_new: false,
     cover_file: 'backinblack_cover.png', # Archivo de portada SÍ existe
     audio_file: nil# NO tiene canciones
   },
@@ -82,6 +84,7 @@ albums_data = [
     media_type: "CD",
     unit_price: 35.00,
     stock_available: 400,
+    condition_is_new: true,
     description: "Álbum que popularizó el rock alternativo.",
     track_count: 12,
     cover_file: nil, # NO tiene archivo de portada
@@ -94,7 +97,7 @@ albums_data = [
 # -----------------------------------------------------------
 
 albums_data.each do |data|
-  album_attributes = data.slice(:name, :author, :genre, :year, :media_type, :unit_price, :stock_available, :description)
+  album_attributes = data.slice(:name, :author, :genre, :year, :media_type, :unit_price, :stock_available, :condition_is_new, :description)
   album = Album.create!(album_attributes)
 
   puts "  -> Creado Álbum: #{album.name}"

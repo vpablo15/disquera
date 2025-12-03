@@ -1,0 +1,9 @@
+<%= render template: "layouts/application" %>
+
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+  <div class="container-fluid">
+    <%= link_to "Disquera" , albums_path, class:"navbar-brand mx-auto fs-3 fw-bold" %>
+  </div>
+</nav>
+
+<%= yield :front_content %>

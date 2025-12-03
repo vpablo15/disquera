@@ -1,15 +1,83 @@
-<p style="color: green"><%= notice %></p>
+<% content_for :front_content do %>
 
-<% content_for :title, "Albums" %>
+  <% content_for :title, "Albums" %>
 
-<h1>Albums</h1>
+  <%= form_tag(albums_path, method: :get, class:"m-5") do %>
+    <h3 class="text-center">Filtros</h3>
+    <div class='d-flex justify-content-evenly flex-wrap'>
+      
+        <%# 1. Nombre del Álbum %>
+        <div class="w-25 m-2">
+          <%= label_tag "filters[name]", "Álbum: ", class:"form-label" %>
+          <%= text_field_tag "filters[name]", @filters[:name], class:"form-control border border-secondary" %>
+        </div>
+      
+        <%# 2. Nombre del Autor %>
+        <div class="w-25 m-2">
+          <%= label_tag "filters[author_name]", "Autor: ", class:"form-label" %>
+          <%= text_field_tag "filters[author_name]", @filters[:author_name], class:"form-control border border-secondary" %>
+        </div>
 
-<div id="albums">
-  <% @albums.each do |album| %>
-    <%= render album %>
-    <p>
-      <%= link_to "Show this album", album %>
-    </p>
+        <%# 3. Nombre del Género %>
+        <div class="w-25 m-2">
+          <%= label_tag "filters[genre_name]", "Género: ", class:"form-label" %>
+          <%= text_field_tag "filters[genre_name]", @filters[:genre_name], class:"form-control border border-secondary" %>
+        </div>
+
+        <%# 4. Año (Igualdad) %>
+        <div class="w-25 m-2">
+          <%= label_tag "filters[year]", "Año: ", class:"form-label" %>
+          <%= number_field_tag "filters[year]", @filters[:year], class:"form-control border border-secondary" %>
+        </div>
+        <%# 5. Media Type (CD o Vinilo) %>
+        <div class="w-25 m-2">
+          <%= label_tag "filters[media_type]", "Formato: ", class:"form-label" %>
+          <%= select_tag "filters[media_type]", 
+              options_for_select([['Vinilo', 'Vinilo'], ['CD', 'CD']], @filters[:media_type]), 
+              { include_blank: 'Cualquier Formato', class:"form-select border border-secondary" } %>
+        </div>
+        
+        <%# 6. Estado (Nuevo o Usado) %>
+        <div class="w-25 m-2">
+          <%= label_tag "filters[condition]", "Estado: ", class:"form-label" %>
+          <%= select_tag "filters[condition]", 
+              options_for_select([['Nuevo', 'true'], ['Usado', 'false']], @filters[:condition]), 
+              { include_blank: 'Cualquier Estado', class:"form-select border border-secondary" } %>
+        </div>
+      
+    </div>
+    
+    <div class="d-flex justify-content-center">
+      <%= submit_tag "Aplicar Filtros", class:'btn btn-primary me-3' %>
+      
+      <%# Botón para limpiar los filtros %>
+      <%= link_to 'Limpiar Filtros', albums_path, class:'btn btn-secondary' %>
+    </div>
   <% end %>
-</div>
 
+  <div id="albums" class="d-flex justify-content-center">
+    <% @albums.each do |album| %>
+      <div class="card m-2" style="width: 18rem;">
+        <% cover_image = album.images.find_by(is_cover: true) %>
+
+        <% if cover_image&.photo&.attached? %>
+          <% # 2. Usa image_tag con el método 'photo' definido en el modelo Image %>
+          <%= image_tag cover_image.photo, class:"card-img-top" %> 
+        <% else %>
+          <p>Portada no disponible.</p>
+        <% end %>
+        <div class="card-body">
+          <h5 class="card-title mb-1"><%= album.name %></h5>
+          <p class="mb-1"><b>Artista: </b><%= album.author.full_name %></p>
+          <p class="mb-1"><b>Género: </b><%= album.genre.name %></p>
+          <p class="mb-1"><b>Condición: </b><%= album.condition_is_new ? "Nuevo" : "Usado" %></p>
+          <p class="mb-1"><b>Año: </b><%= album.year %></p>
+          <p class=""><b>Tipo: </b><%= album.media_type_before_type_cast %></p>
+          <p class="card-text"><%= album.description %></p>
+
+          <%= link_to "Ver Disco", album, class:"btn btn-primary" %>
+        </div>
+      </div>
+    <% end %>
+  </div>
+<% end %>
