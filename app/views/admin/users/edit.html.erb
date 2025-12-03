@@ -27,21 +27,23 @@
             <%= form.password_field :password_confirmation, autocomplete: "new-password", class: "form-control" %>
           </div>
 
-          <div class="mb-3">
-            <%= form.label :role, "Selecciona tu Rol", class: "form-label" %>
-            <%
-              allowed_roles = User.roles.keys.select do |k|
-                can? :create, User.new(role: User.roles[k])
-              end
-              select_options = allowed_roles.map { |k| [k.humanize, k] }
-            %>
+          <% if can? :change_role, form.object %>
+            <div class="mb-3">
+              <%= form.label :role, "Selecciona tu Rol", class: "form-label" %>
+              <%
+                allowed_roles = User.roles.keys.select do |k|
+                  can? :create, User.new(role: User.roles[k])
+                end
+                select_options = allowed_roles.map { |k| [k.humanize, k] }
+              %>
 
-            <%= form.select :role,
-              select_options,
-              { selected: form.object.role || :basic },
-              { class: "form-select" }
-            %>
-          </div>
+              <%= form.select :role,
+                select_options,
+                { selected: form.object.role || :basic },
+                { class: "form-select" }
+              %>
+            </div>
+          <% end %>
 
           <div class="d-grid gap-2">
             <%= form.submit "Actualizar Usuario", class: "btn btn-primary btn-lg" %>
