@@ -14,7 +14,7 @@ class SalesController < ApplicationController
   end
 
   def create
-    @sale = Sale.new(sale_params)
+    @sale = current_user.sales.new(sale_params)
 
     if @sale.save
       redirect_to sales_path, notice: "Venta creada correctamente."

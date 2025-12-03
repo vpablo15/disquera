@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2025_12_03_022303) do
+ActiveRecord::Schema[8.1].define(version: 2025_12_03_215757) do
   create_table "active_storage_attachments", force: :cascade do |t|
     t.bigint "blob_id", null: false
     t.datetime "created_at", null: false
@@ -103,6 +103,8 @@ ActiveRecord::Schema[8.1].define(version: 2025_12_03_022303) do
     t.datetime "sale_date"
     t.decimal "total"
     t.datetime "updated_at", null: false
+    t.integer "user_id", null: false
+    t.index ["user_id"], name: "index_sales_on_user_id"
   end
 
   create_table "users", force: :cascade do |t|
@@ -125,4 +127,5 @@ ActiveRecord::Schema[8.1].define(version: 2025_12_03_022303) do
   add_foreign_key "audios", "albums"
   add_foreign_key "images", "albums"
   add_foreign_key "sale_items", "sales"
+  add_foreign_key "sales", "users"
 end
