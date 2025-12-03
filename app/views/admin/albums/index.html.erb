@@ -81,12 +81,17 @@
                   edit_admin_album_path(album),
                   class: "btn btn-sm btn-warning me-1" %>
 
+
+
                 <%# Botón para Borrado Lógico (Eliminar producto) %>
-                <%= link_to "Deshabilitar",
-                  admin_album_path(album),
+                <% disabled_enabled_label =  (album.deleted_at.nil?) ?
+                   "Deshabilitar" :
+                  "Habilitar" %>
+                <%= link_to disabled_enabled_label,
+                  admin_album_disabled_enabled_path(album),
                   data: {
-                    turbo_method: :delete,
-                    turbo_confirm: "¿Está seguro de dar de baja a #{album.name}? Esto establecerá el stock a 0 y la fecha de baja."
+                    turbo_confirm: "¿Está seguro de
+#{disabled_enabled_label} el producto #{album.name}?"
                   },
                   class: "btn btn-sm btn-danger" %>
               </td>

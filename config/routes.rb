@@ -21,7 +21,9 @@ Rails.application.routes.draw do
     root "admin#home"
     resources :users, only: [ :index, :destroy, :update, :edit ]
     resources :authors
+
     resources :albums
+    patch "albums/disabled_enabled/:id", to: "albums#disabled_enabled", as: :album_disabled_enabled
   end
 
   # Healthcheck

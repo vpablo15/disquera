@@ -1,6 +1,6 @@
 class Admin::AlbumsController < ApplicationController
   layout "admin"
-  before_action :set_album, only: %i[ show edit update destroy ]
+  before_action :set_album, only: %i[ show edit update destroy disabled_enabled]
 
   # GET /albums or /albums.json
   def index
@@ -48,6 +48,10 @@ class Admin::AlbumsController < ApplicationController
         format.json { render json: @album.errors, status: :unprocessable_entity }
       end
     end
+  end
+
+  def disabled_enabled
+    @album.disabled_enabled
   end
 
   # DELETE /albums/1 or /albums/1.json
