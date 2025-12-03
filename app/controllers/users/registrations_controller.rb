@@ -5,7 +5,7 @@ class Users::RegistrationsController < Devise::RegistrationsController
   # before_action :configure_account_update_params, only: [:update]
 
   skip_before_action :require_no_authentication, only: [:new, :create]
-  authorize_resource class: 'User', only: [:new, :create]
+  authorize_resource class: 'User'
 
   # GET /resource/sign_up
   # def new
@@ -19,10 +19,9 @@ class Users::RegistrationsController < Devise::RegistrationsController
   # POST /resource (Método 'create' que maneja el envío del formulario)
   def create
     build_resource(sign_up_params)
-
+    authorize! :create, resource
     resource.save
     if resource.persisted?
-
       if resource.active_for_authentication?
         set_flash_message! :notice, :signed_up
       else
