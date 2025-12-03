@@ -10,7 +10,8 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2025_11_30_032417) do
+ActiveRecord::Schema[8.1].define(version: 2025_11_30_212844) do
+
   create_table "users", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.string "email", default: "", null: false
@@ -23,4 +24,26 @@ ActiveRecord::Schema[8.1].define(version: 2025_11_30_032417) do
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
+  
+  create_table "sale_items", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.decimal "price"
+    t.string "product_name"
+    t.integer "quantity"
+    t.integer "sale_id", null: false
+    t.datetime "updated_at", null: false
+    t.index ["sale_id"], name: "index_sale_items_on_sale_id"
+  end
+
+  create_table "sales", force: :cascade do |t|
+    t.string "buyer_contact"
+    t.string "buyer_name"
+    t.boolean "cancelled", default: false
+    t.datetime "created_at", null: false
+    t.datetime "sale_date"
+    t.decimal "total"
+    t.datetime "updated_at", null: false
+  end
+
+  add_foreign_key "sale_items", "sales"
 end
