@@ -1,18 +1,107 @@
 <% content_for :admin_content do %>
-<p style="color: green"><%= notice %></p>
+<%# app/views/admin/albums/index.html.erb %>
 
-<% content_for :title, "Albums" %>
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h2 class="mb-0 text-dark">
+      <i class="fas fa-compact-disc me-2"></i> Administración de Discos
+    </h2>
 
-<h1>Albums</h1>
+    <%# Botón que abre el modal de creación (Agregar Disco) %>
+    <%= link_to "Agregar Nuevo Disco", '#albumModal',
+      data: { bs_toggle: "modal", bs_target: "#albumModal", action: "new" },
+      class: "btn btn-primary" %>
+  </div>
 
-<div id="albums">
-  <% @albums.each do |album| %>
-    <%= render album %>
-    <p>
-      <%= link_to "Show this album", admin_album_path(album) %>
-    </p>
+  <%# Sección de Búsqueda y Filtro %>
+  <div class="mb-4">
+    <%= form_with url: admin_albums_path, method: :get, class: "d-flex" do %>
+      <%= text_field_tag :query, params[:query],
+        placeholder: "Buscar por nombre, código o autor...",
+        class: "form-control me-2" %>
+      <%= button_tag "Buscar", type: "submit", class: "btn btn-outline-secondary" %>
+    <% end %>
+  </div>
+
+  <%# Tabla de Discos %>
+  <div class="card shadow-lg border-0">
+    <div class="card-body p-0">
+      <div class="table-responsive">
+        <table class="table table-striped table-hover mb-0 align-middle">
+          <thead class="table-dark">
+          <tr>
+            <th scope="col">ID</th>
+            <th scope="col">Nombre del Álbum</th>
+            <th scope="col" class="text-end">Precio</th>
+            <th scope="col" class="text-center">Stock Disponible</th>
+            <th scope="col" class="text-center">Estado</th>
+            <th scope="col" class="text-center">Acciones</th>
+          </tr>
+          </thead>
+          <tbody>
+          <% @albums.each do |album| %>
+            <tr id="album-<%= album.id %>"
+                class="<%= 'table-secondary' if album.deleted_at.present? %>">
+
+              <th scope="row"><%= album.id %></th>
+              <td><%= album.name %></td>
+              <td class="text-end"><%= number_to_currency(album.unit_price) %></td>
+
+              <%# Columna de Stock Rápido %>
+              <td class="text-center fw-bold">
+                <span class="<%= 'text-danger' if album.stock_available.zero? %>">
+                  <%= album.stock_available %>
+                </span>
+                <%# Botón rápido para editar stock (Cambiar stock) %>
+                <%= link_to content_tag(:i, "", class: "fas fa-sync-alt"),
+                  '#stockModal',
+                  data: {
+                    bs_toggle: "modal",
+                    bs_target: "#stockModal",
+                    album_id: album.id,
+                    current_stock: album.stock_available
+                  },
+                  class: "btn btn-sm text-info p-0 ms-2" %>
+              </td>
+
+              <%# Columna de Estado (Borrado Lógico) %>
+              <td class="text-center">
+                <% if album.deleted_at.present? %>
+                  <span class="badge bg-danger">Dada de Baja</span>
+                <% elsif album.stock_available.zero? %>
+                  <span class="badge bg-warning text-dark">Agotado</span>
+                <% else %>
+                  <span class="badge bg-success">Disponible</span>
+                <% end %>
+              </td>
+
+              <%# Columna de Acciones %>
+              <td class="text-center">
+                <%# Botón para Modificar (Abre el mismo modal de creación) %>
+                <%= link_to "Editar",
+                  edit_admin_album_path(album),
+                  class: "btn btn-sm btn-warning me-1" %>
+
+                <%# Botón para Borrado Lógico (Eliminar producto) %>
+                <%= link_to "Deshabilitar",
+                  admin_album_path(album),
+                  data: {
+                    turbo_method: :delete,
+                    turbo_confirm: "¿Está seguro de dar de baja a #{album.name}? Esto establecerá el stock a 0 y la fecha de baja."
+                  },
+                  class: "btn btn-sm btn-danger" %>
+              </td>
+            </tr>
+          <% end %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <% if @albums.empty? %>
+    <div class="alert alert-warning mt-4" role="alert">
+      No hay discos registrados que coincidan con la búsqueda.
+    </div>
   <% end %>
-</div>
 
-<%= link_to "New album", new_admin_album_path %>
 <% end %>
