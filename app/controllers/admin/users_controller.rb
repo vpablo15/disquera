@@ -3,26 +3,32 @@
 class Admin::UsersController < ApplicationController
 
   layout "admin"
-
-  before_action :set_user, only: [:destroy, :edit, :update]
+  before_action :authenticate_user!
+  # before_action :set_user, only: [:destroy, :edit, :update]
+  load_and_authorize_resource class: "User"
 
   def index
-    @users = User.all
+    @users
   end
 
   def show
-    @user = User.find(params[:id])
+    @user
   end
 
   def update
+    Rails.logger.debug "Parámetros recibidos: #{user_params.inspect}"
     user_data = user_params
+
+    if user_data[:role].present?
+      authorize! :change_role, @user
+    end
 
     if user_data[:password].blank? && user_data[:password_confirmation].blank?
       user_data.delete(:password)
       user_data.delete(:password_confirmation)
     end
     if @user.update(user_data)
-      redirect_to admin_users_path, notice: "El usuario #{@user.email} fue
+      redirect_to edit_admin_user_path, notice: "El usuario #{@user.email} fue
 actualizado
 correctamente."
     else
@@ -33,7 +39,8 @@ correctamente."
   end
 
   def user_params
-    params.require(:user).permit(:email, :password, :password_confirmation)
+    params.require(:user).permit(:email, :password, :password_confirmation,
+      :role)
   end
 
   def edit
