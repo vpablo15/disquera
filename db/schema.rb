@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2025_12_03_001637) do
+ActiveRecord::Schema[8.1].define(version: 2025_12_03_022303) do
   create_table "active_storage_attachments", force: :cascade do |t|
     t.bigint "blob_id", null: false
     t.datetime "created_at", null: false
@@ -51,6 +51,7 @@ ActiveRecord::Schema[8.1].define(version: 2025_12_03_001637) do
     t.integer "stock_available"
     t.decimal "unit_price"
     t.datetime "updated_at", null: false
+    t.integer "year"
     t.index ["author_id"], name: "index_albums_on_author_id"
     t.index ["genre_id"], name: "index_albums_on_genre_id"
   end

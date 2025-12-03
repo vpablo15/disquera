@@ -26,7 +26,7 @@ class Admin::AlbumsController < ApplicationController
 
     respond_to do |format|
       if @album.save
-        format.html { redirect_to @album, notice: "Album was successfully created." }
+        format.html { redirect_to admin_album_path(@album), notice: "Album was successfully created." }
         format.json { render :show, status: :created, location: @album }
       else
         format.html { render :new, status: :unprocessable_entity }
@@ -39,7 +39,7 @@ class Admin::AlbumsController < ApplicationController
   def update
     respond_to do |format|
       if @album.update(album_params)
-        format.html { redirect_to @album, notice: "Album was successfully updated.", status: :see_other }
+        format.html { redirect_to admin_album_path(@album), notice: "Album was successfully updated.", status: :see_other }
         format.json { render :show, status: :ok, location: @album }
       else
         format.html { render :edit, status: :unprocessable_entity }
@@ -53,7 +53,7 @@ class Admin::AlbumsController < ApplicationController
     @album.destroy!
 
     respond_to do |format|
-      format.html { redirect_to albums_path, notice: "Album was successfully destroyed.", status: :see_other }
+      format.html { redirect_to admin_albums_path, notice: "Album was successfully destroyed.", status: :see_other }
       format.json { head :no_content }
     end
   end
@@ -66,6 +66,6 @@ class Admin::AlbumsController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def album_params
-      params.expect(album: [ :name, :description, :unit_price, :stock_available, :genre_id, :media_type, :condition_is_new, :author_id, :deleted_at ])
+      params.expect(album: [ :name, :description, :unit_price, :stock_available, :genre_id, :year, :media_type, :condition_is_new, :author_id, :deleted_at ])
     end
 end
