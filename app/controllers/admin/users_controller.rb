@@ -16,6 +16,7 @@ class Admin::UsersController < ApplicationController
   end
 
   def update
+    authorize! :change_role, @user
     user_data = user_params
 
     if user_data[:password].blank? && user_data[:password_confirmation].blank?
