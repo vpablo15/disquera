@@ -3,9 +3,9 @@
     <h2 class="mb-0 text-dark">
       <i class="fas fa-users me-2"></i> Listado de Usuarios
     </h2>
-    <%= link_to "Crear Nuevo Usuario",
-      new_user_registration_path,
-      class: "btn btn-primary" %>
+    <% if can? :create, User %>
+      <%= link_to "Crear Nuevo Usuario", new_user_registration_path, class: "btn btn-primary" %>
+    <% end %>
   </div>
 
   <div class="card shadow-lg border-0">
@@ -15,7 +15,8 @@
           <thead class="table-dark">
           <tr>
             <th scope="col">ID</th>
-            <th scope="col"></th> <th scope="col">Email</th>
+            <th scope="col"></th>
+            <th scope="col">Email</th>
             <th scope="col">Registrado Desde</th>
             <th scope="col" class="text-center">Acciones</th>
           </tr>
@@ -39,22 +40,12 @@
               <td class="d-flex flex-row flex-wrap w-100 h-100 gap-3
             justify-content-center">
 
-                <%= link_to "Ver",
-                  class: "btn btn-sm btn-info me-1" %>
+                <%= link_to "Ver", class: "btn btn-sm btn-info me-1" %>
 
-                <%= link_to "Editar",
-                  edit_admin_user_path(user),
-                  class: "btn btn-sm btn-warning me-1" %>
+                <%= link_to "Editar", edit_admin_user_path(user), class: "btn btn-sm btn-warning me-1" %>
 
-                <%= link_to "Eliminar",
-                  admin_user_path(user.id),
-                  data: {
-                    turbo_method: :delete,
-                    turbo_confirm: "¿Estás seguro de que quieres eliminar a
-#{user.email} y #{user.id}?",
-                  },
-                  class: "btn btn-sm btn-danger #{(can? :delete, user) ?
-                    "enabled" : "disabled"}" %>
+                <%= link_to "Eliminar", admin_user_path(user.id), data: { turbo_method: :delete, turbo_confirm: "¿Estás seguro de que quieres eliminar a
+#{user.email} y #{user.id}?", }, class: "btn btn-sm btn-danger #{(can? :delete, user) ? "enabled" : "disabled"}" %>
               </td>
             </tr>
           <% end %>
