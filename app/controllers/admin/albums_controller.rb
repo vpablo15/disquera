@@ -18,6 +18,8 @@ class Admin::AlbumsController < ApplicationController
 
   # GET /albums/1/edit
   def edit
+    @authors = Author.all
+    @genres = Genre.all
   end
 
   # POST /albums or /albums.json
