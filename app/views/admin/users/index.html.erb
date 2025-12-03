@@ -50,7 +50,8 @@
                   turbo_confirm: "¿Estás seguro de que quieres eliminar a
 #{user.email} y #{user.id}?",
                 },
-                class: "btn btn-sm btn-danger" %>
+                class: "btn btn-sm btn-danger #{(can? :delete, User) ?
+                  "enabled" : "disabled"}" %>
             </td>
           </tr>
         <% end %>
