@@ -16,15 +16,19 @@ class Admin::UsersController < ApplicationController
   end
 
   def update
-    authorize! :change_role, @user
+    Rails.logger.debug "Parámetros recibidos: #{user_params.inspect}"
     user_data = user_params
+
+    if user_data[:role].present?
+      authorize! :change_role, @user
+    end
 
     if user_data[:password].blank? && user_data[:password_confirmation].blank?
       user_data.delete(:password)
       user_data.delete(:password_confirmation)
     end
     if @user.update(user_data)
-      redirect_to admin_users_path, notice: "El usuario #{@user.email} fue
+      redirect_to edit_admin_user_path, notice: "El usuario #{@user.email} fue
 actualizado
 correctamente."
     else

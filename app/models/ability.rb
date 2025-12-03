@@ -30,7 +30,6 @@ class Ability
     can :manage, User
     cannot [ :destroy, :delete, :index, :create ], User, role: User
       .roles[:admin]
-    cannot :update, User, :role
   end
 
   def can_employee(user)
@@ -40,6 +39,6 @@ class Ability
   end
 
   def can_all_users(user)
-    can [ :show, :update ], User, id: user.id
+    can [ :show, :edit, :update ], User, id: user.id
   end
 end
