@@ -8,6 +8,7 @@
 
   <div class="modal-body">
 
+    <%# CAMPOS EXISTENTES %>
     <div class="mb-3">
       <%= f.label :name, "Nombre del Álbum", class: "form-label" %>
       <%= f.text_field :name, class: "form-control" %>
@@ -18,6 +19,7 @@
       <%= f.text_area :description, rows: 3, class: "form-control" %>
     </div>
 
+    <%# Asociaciónes (Artista y Género) %>
     <div class="row">
       <div class="col-md-6 mb-3">
         <%= f.label :author_id, "Artista", class: "form-label" %>
@@ -33,6 +35,7 @@
       </div>
     </div>
 
+    <%# Metadatos del Disco (Precio, Tipo de Medio, Año) %>
     <div class="row">
       <div class="col-md-4 mb-3">
         <%= f.label :unit_price, "Precio Unitario", class: "form-label" %>
@@ -52,7 +55,27 @@
       </div>
     </div>
 
-    <%# Nota: No incluimos stock_available aquí, ya que se gestiona por separado. %>
+    <hr class="my-3">
+
+    <%# CAMPOS FALTANTES AGREGADOS %>
+    <div class="row">
+      <div class="col-md-6 mb-3">
+        <%= f.label :stock_available, "Stock Disponible", class: "form-label" %>
+        <%# Aseguramos que sea un campo numérico entero %>
+        <%= f.number_field :stock_available, min: 0, class: "form-control" %>
+      </div>
+
+      <div class="col-md-6 d-flex align-items-end mb-3">
+        <div class="mb-3 w-100">
+          <%= f.label :condition_is_new, "Condición", class: "form-label" %>
+          <%= f.select :condition_is_new,
+            [["Nuevo", true], ["Usado", false]],
+            { prompt: "Seleccione condición" },
+            { class: "form-select" } %>
+        </div>
+      </div>
+
+    <%# El campo deleted_at se omite intencionalmente ya que no debería ser manipulado por el usuario en esta vista. %>
 
   </div>
 

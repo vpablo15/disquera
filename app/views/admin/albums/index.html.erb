@@ -7,8 +7,7 @@
     </h2>
 
     <%# Botón que abre el modal de creación (Agregar Disco) %>
-    <%= link_to "Agregar Nuevo Disco", '#albumModal',
-      data: { bs_toggle: "modal", bs_target: "#albumModal", action: "new" },
+    <%= link_to "Agregar Nuevo Disco", new_admin_album_path,
       class: "btn btn-primary" %>
   </div>
 
