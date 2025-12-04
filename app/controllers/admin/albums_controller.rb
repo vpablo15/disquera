@@ -1,6 +1,6 @@
 class Admin::AlbumsController < ApplicationController
   layout "admin"
-  before_action :set_album, only: %i[ show edit update destroy]
+  before_action :set_album, only: %i[ show edit update destroy disabled_enabled ]
 
   # GET /albums or /albums.json
   def index
@@ -51,9 +51,7 @@ class Admin::AlbumsController < ApplicationController
   end
 
   def disabled_enabled
-    @album = Album.unscope(where: :deleted_at).find(params[:id])
     @album.disabled_enabled
-    Rails.logger.debug "adskfpoaskfdposakfdpo"
     redirect_to admin_albums_path(@album), notice: "Album fue
 correctamente habilitado/deshabilitado."
   end
@@ -71,7 +69,7 @@ correctamente habilitado/deshabilitado."
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_album
-      @album = Album.find(params.expect(:id))
+      @album = Album.unscope(where: :deleted_at).find(params[:id])
     end
 
     # Only allow a list of trusted parameters through.
