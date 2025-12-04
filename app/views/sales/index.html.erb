@@ -52,12 +52,8 @@
                           class: "btn btn-warning btn-sm mb-1" %>
                   <% end %>
                 <% end %>
-
-                <%= link_to "Factura PDF",
-                      invoice_sale_path(sale),
-                      class: "btn btn-sm btn-info mb-1",
-                      target: "_blank" %>
-
+                <%= link_to "Ver Factura", invoice_sale_path(sale), class: "btn btn-info btn-sm", target: "_blank" %>
+                <%= link_to "Descargar PDF", invoice_sale_path(sale, download: true), class: "btn btn-secondary btn-sm" %>
               </td>
             </tr>
           <% end %>
