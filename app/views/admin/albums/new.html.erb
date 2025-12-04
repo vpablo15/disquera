@@ -1,9 +1,8 @@
 <% content_for :admin_content do %>
-<% content_for :title, "New album" %>
 
 <h1>New album</h1>
 
-<%= render "form", album: @album %>
+<%= render "form", album: @album, authors: @authors, genres: @genres %>
 
 <br>
 
