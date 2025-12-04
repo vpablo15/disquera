@@ -71,7 +71,7 @@
         <p>El clip de audio no está disponible para este álbum.</p>
       <% end %>
     <% end %>
-    </div>
+  </div>
 
 <%# 1. Filtrar las imágenes que tienen un adjunto real en Active Storage %>
 <% attached_images = @album.images.select { |img| img.photo.attached? } %>
@@ -125,4 +125,33 @@
     
   </div>
 <% end %>
+  <% related_albums = @album.related_albums%>
+  <% if related_albums %>
+    <h2 class="text-center mt-5 fw-bold">Discos Relacionados</h2>
+    <div id="albums" class="d-flex justify-content-center flex-wrap">
+      <% related_albums.each do |album| %>
+        <div class="card m-2" style="width: 18rem;">
+          <% cover_image = album.images.find_by(is_cover: true) %>
+
+          <% if cover_image&.photo&.attached? %>
+            <% # 2. Usa image_tag con el método 'photo' definido en el modelo Image %>
+            <%= image_tag cover_image.photo, class:"card-img-top" %> 
+          <% else %>
+            <%= image_tag "no_image.jpg", alt: "Imagen no disponible", class:"card-img-top" %>
+          <% end %>
+          <div class="card-body">
+            <h5 class="card-title mb-1"><%= album.name %></h5>
+            <p class="mb-1"><b>Artista: </b><%= album.author.full_name %></p>
+            <p class="mb-1"><b>Género: </b><%= album.genre.name %></p>
+            <p class="mb-1"><b>Condición: </b><%= album.condition_is_new ? "Nuevo" : "Usado" %></p>
+            <p class="mb-1"><b>Año: </b><%= album.year %></p>
+            <p class=""><b>Tipo: </b><%= album.media_type_before_type_cast %></p>
+            <p class="card-text"><%= album.description %></p>
+
+            <%= link_to "Ver Disco", album, class:"btn btn-primary" %>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  <% end %>
 <% end %>
