@@ -1,10 +1,10 @@
 class Admin::AlbumsController < ApplicationController
   layout "admin"
-  before_action :set_album, only: %i[ show edit update destroy disabled_enabled]
+  before_action :set_album, only: %i[ show edit update destroy]
 
   # GET /albums or /albums.json
   def index
-    @albums = Album.all
+    @albums = Album.unscope(where: :deleted_at).all
   end
 
   # GET /albums/1 or /albums/1.json
@@ -51,7 +51,11 @@ class Admin::AlbumsController < ApplicationController
   end
 
   def disabled_enabled
+    @album = Album.unscope(where: :deleted_at).find(params[:id])
     @album.disabled_enabled
+    Rails.logger.debug "adskfpoaskfdposakfdpo"
+    redirect_to admin_albums_path(@album), notice: "Album fue
+correctamente habilitado/deshabilitado."
   end
 
   # DELETE /albums/1 or /albums/1.json

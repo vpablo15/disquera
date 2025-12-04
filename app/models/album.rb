@@ -17,6 +17,7 @@ class Album < ApplicationRecord
   validates :stock_available, :year, numericality: { only_integer: true, greater_than_or_equal_to: 0 }
 
   def disabled_enabled
+    Rails.logger.debug "#Método disableenabled: #{self.deleted_at.nil?}"
     if self.deleted_at.nil?
       update(deleted_at: Time.current)
     else

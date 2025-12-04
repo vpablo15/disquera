@@ -90,6 +90,7 @@
                 <%= link_to disabled_enabled_label,
                   admin_album_disabled_enabled_path(album),
                   data: {
+                    turbo_method: :patch,
                     turbo_confirm: "¿Está seguro de
 #{disabled_enabled_label} el producto #{album.name}?"
                   },
