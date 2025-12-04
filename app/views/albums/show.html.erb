@@ -12,7 +12,7 @@
       <%= image_tag "no_image.jpg", alt: "Imagen no disponible", class:"w-50 rounded" %>
     <% end %>
     
-    <div class="d-flex flex-column w-50 fs-5">
+    <div class="d-flex flex-column w-50 my-3 fs-5">
       <div>
         <strong>Nombre:</strong>
         <p class="px-2"><%= @album.name %></p>
@@ -72,5 +72,57 @@
       <% end %>
     <% end %>
     </div>
+
+<%# 1. Filtrar las imágenes que tienen un adjunto real en Active Storage %>
+<% attached_images = @album.images.select { |img| img.photo.attached? } %>
+
+<%# 2. CONDICIONAL: Mostrar el carrusel solo si hay imágenes adjuntas %>
+<% if attached_images.present? %>
+
+  <div id="albumCarouselIndicators" class="carousel slide w-50 m-auto mb-3" data-bs-ride="carousel">
     
+    <%# === BLOQUE 1: INDICADORES === %>
+    <div class="carousel-indicators">
+      <% attached_images.each_with_index do |image, index| %>
+        <button type="button" 
+                data-bs-target="#albumCarouselIndicators" 
+                data-bs-slide-to="<%= index %>" 
+                class="<%= 'active' if index == 0 %>" <%# Asigna 'active' solo al primero %>
+                aria-current="<%= 'true' if index == 0 %>" 
+                aria-label="Slide <%= index + 1 %>">
+        </button>
+      <% end %>
+    </div>
+    
+    <%# === BLOQUE 2: SLIDES (IMÁGENES) === %>
+    <div class="carousel-inner">
+      <% attached_images.each_with_index do |image, index| %>
+        
+        <div class="carousel-item <%= 'active' if index == 0 %>"> <%# Asigna 'active' solo al primero %>
+          
+          <%# Usamos image_tag con el método .photo y un variante para optimizar el tamaño %>
+          <%= image_tag image.photo, class: "d-block w-100", alt: image.title %>
+                        
+          <%# Opcional: Caption para mostrar el título/descripción %>
+          <div class="carousel-caption d-none d-md-block">
+            <h5><%= image.title %></h5>
+            <p><%= image.short_description %></p>
+          </div>
+        </div>
+        
+      <% end %>
+    </div>
+    
+    <%# === BLOQUE 3: CONTROLES (Flechas de navegación) === %>
+    <button class="carousel-control-prev" type="button" data-bs-target="#albumCarouselIndicators" data-bs-slide="prev">
+      <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+      <span class="visually-hidden">Previous</span>
+    </button>
+    <button class="carousel-control-next" type="button" data-bs-target="#albumCarouselIndicators" data-bs-slide="next">
+      <span class="carousel-control-next-icon" aria-hidden="true"></span>
+      <span class="visually-hidden">Next</span>
+    </button>
+    
+  </div>
+<% end %>
 <% end %>
