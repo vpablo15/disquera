@@ -9,40 +9,155 @@
 
       <%= form_with model: @sale, local: true do |f| %>
 
-        <!-- Datos del comprador -->
+        <h3>Agregar Items</h3>
+
+        <div class="mb-3">
+          <label>Buscar producto</label>
+          <input type="text"
+                 id="album-search"
+                 class="form-control"
+                 placeholder="Escribe para buscar...">
+        </div>
+
+        <ul id="search-results" class="list-group mb-3" style="display:none;"></ul>
+
+        <table class="table table-bordered mt-3">
+          <thead>
+            <tr>
+              <th>Producto</th>
+              <th>Precio</th>
+              <th>Cantidad</th>
+              <th>Subtotal</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody id="items-table"></tbody>
+        </table>
+
+        <hr>
+
+        <div class="row mb-4">
+          <div class="col-md-4">
+            <label class="form-label">Total</label>
+            <input type="number"
+                   id="total-field"
+                   class="form-control"
+                   step="0.01"
+                   name="sale[total]"
+                   value="0.00"
+                   readonly>
+          </div>
+        </div>
+
         <h4 class="mb-3">Datos del Comprador</h4>
         <div class="row g-3">
           <div class="col-md-6">
-            <%= f.label :buyer_name, "Nombre del comprador", class: "form-label" %>
-            <%= f.text_field :buyer_name, class: "form-control", placeholder: "Ej: Juan Pérez" %>
+            <%= f.label :buyer_name %>
+            <%= f.text_field :buyer_name, class: "form-control" %>
           </div>
 
           <div class="col-md-6">
-            <%= f.label :buyer_contact, "Contacto", class: "form-label" %>
-            <%= f.text_field :buyer_contact, class: "form-control", placeholder: "Teléfono / Email" %>
-          </div>
-
-          <div class="col-md-6">
-            <%= f.label :sale_date, "Fecha de la venta", class: "form-label" %>
-            <%= f.datetime_select :sale_date, class: "form-control" %>
-          </div>
-        </div>
-        
-        <hr class="my-4">
-
-        <!-- Total -->
-        <div class="row mb-4">
-          <div class="col-md-4">
-            <%= f.label :total, "Total", class: "form-label" %>
-            <%= f.number_field :total, class: "form-control", step: "0.01", placeholder: "0.00" %>
+            <%= f.label :buyer_contact %>
+            <%= f.text_field :buyer_contact, class: "form-control" %>
           </div>
         </div>
 
-        <div class="text-end">
+        <div class="text-end mt-4">
           <%= f.submit "Guardar Venta", class: "btn btn-primary btn-lg" %>
         </div>
 
       <% end %>
+
     </div>
   </div>
 </div>
+<script>
+  const albums = <%= Album.where(deleted_at: nil)
+                         .select(:id, :name, :unit_price, :stock_available)
+                         .to_json.html_safe %>;
+
+  const search = document.getElementById("album-search");
+  const results = document.getElementById("search-results");
+  const itemsTable = document.getElementById("items-table");
+  const totalField = document.getElementById("total-field");
+
+  function updateTotal() {
+    let total = 0;
+
+    document.querySelectorAll(".item-subtotal").forEach(s => {
+      total += parseFloat(s.textContent) || 0;
+    });
+
+    totalField.value = total.toFixed(2);
+  }
+
+  function addItem(album) {
+    const row = document.createElement("tr");
+    
+    row.innerHTML = `
+      <td>${album.name}
+        <input type="hidden" name="sale_items[][album_id]" value="${album.id}">
+      </td>
+      <td>$${album.unit_price}</td>
+      <td>
+        <input type="number"
+               name="sale_items[][quantity]"
+               value="1"
+               min="1"
+               max="${album.stock_available}"
+               class="form-control item-qty"
+               style="width:80px">
+      </td>
+      <td class="item-subtotal">${album.unit_price}</td>
+      <td>
+        <button type="button" class="btn btn-danger btn-sm remove-item">X</button>
+      </td>
+    `;
+
+    itemsTable.appendChild(row);
+
+    row.querySelector(".remove-item").addEventListener("click", () => {
+      row.remove()
+      updateTotal()
+    });
+
+    row.querySelector(".item-qty").addEventListener("input", e => {
+      const qty = parseInt(e.target.value) || 0
+      row.querySelector(".item-subtotal").textContent = (qty * album.unit_price).toFixed(2)
+      updateTotal()
+    });
+
+    updateTotal();
+  }
+
+  search.addEventListener("input", () => {
+    const term = search.value.toLowerCase();
+    results.innerHTML = ""
+
+    if (term.length < 1) {
+      results.style.display = "none"
+      return;
+    }
+
+    const filtered = albums.filter(a => a.name.toLowerCase().includes(term));
+
+    if (filtered.length === 0) {
+      results.style.display = "none"
+      return;
+    }
+
+    results.style.display = "block"
+
+    filtered.forEach(album => {
+      const li = document.createElement("li");
+      li.className = "list-group-item list-group-item-action"
+      li.textContent = `${album.name} — $${album.unit_price}`
+      li.addEventListener("click", () => {
+        addItem(album)
+        results.style.display = "none"
+        search.value = ""
+      });
+      results.appendChild(li);
+    });
+  });
+</script>
