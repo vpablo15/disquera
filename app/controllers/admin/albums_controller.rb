@@ -1,6 +1,7 @@
 class Admin::AlbumsController < ApplicationController
   layout "admin"
   before_action :set_album, only: %i[ show edit update destroy disabled_enabled ]
+  before_action :set_album_context, only: %i[ edit new create update]
 
   # GET /albums or /albums.json
   def index
@@ -18,8 +19,6 @@ class Admin::AlbumsController < ApplicationController
 
   # GET /albums/1/edit
   def edit
-    @authors = Author.all
-    @genres = Genre.all
   end
 
   # POST /albums or /albums.json
@@ -70,6 +69,11 @@ correctamente habilitado/deshabilitado."
     # Use callbacks to share common setup or constraints between actions.
     def set_album
       @album = Album.unscope(where: :deleted_at).find(params[:id])
+    end
+
+    def set_album_context
+      @authors = Author.all
+      @genres = Genre.all
     end
 
     # Only allow a list of trusted parameters through.
