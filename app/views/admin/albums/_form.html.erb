@@ -25,6 +25,7 @@
         <%= f.label :author_id, "Artista", class: "form-label" %>
         <%= f.collection_select :author_id, authors, :id, :full_name,
           { prompt: "Seleccione un autor" }, { class: "form-select" } %>
+        </div>
       </div>
 
       <div class="col-md-6 mb-3">
@@ -57,7 +58,6 @@
 
     <hr class="my-3">
 
-    <%# CAMPOS FALTANTES AGREGADOS %>
     <div class="row">
       <div class="col-md-6 mb-3">
         <%= f.label :stock_available, "Stock Disponible", class: "form-label" %>
@@ -74,6 +74,35 @@
             { class: "form-select" } %>
         </div>
       </div>
+
+      <%= f.fields_for :clip, @album.audio do |audio_fields| %>
+        <fieldset>
+          <legend>Pista de Audio Principal</legend>
+          <p>Sube el archivo de audio (MP3, etc.) para el álbum.</p>
+
+          <div class="field">
+            <%= audio_fields.label :clip, "Archivo de Audio" %>
+            <%= audio_fields.file_field :clip %>
+          </div>
+        </fieldset>
+      <% end %>
+
+      <%= f.fields_for :photo, @album.images.first do |image_fields| %>
+        <fieldset>
+          <legend>Portada del Álbum (Imagen)</legend>
+          <p>Sube el archivo de imagen para la portada.</p>
+
+          <div class="field">
+            <%= image_fields.label :photo, "Archivo de Portada" %>
+            <%= image_fields.file_field :photo %>
+          </div>
+
+          <%= image_fields.hidden_field :is_cover %>
+          <%= image_fields.hidden_field :title %>
+          </fieldset>
+        <% end %>
+
+
 
     <%# El campo deleted_at se omite intencionalmente ya que no debería ser manipulado por el usuario en esta vista. %>
 
