@@ -26,7 +26,6 @@ class Admin::AlbumsController < ApplicationController
 
   # POST /albums or /albums.json
   def create
-
     Rails.logger.debug "Album Params Recibidos: #{album_params.inspect}"
     @album = Album.new(album_params.except(:photo, :clip))
     cover_file = album_params[:photo]
@@ -34,40 +33,58 @@ class Admin::AlbumsController < ApplicationController
 
     if @album.save
       if cover_file.present?
-        @album.images.create!(
-          title: "#{@album.name} Cover",
-          is_cover: cover_file[:is_cover],
-        ) do |image|
-          # Aquí pasamos el objeto UploadedFile
+        @album.images.create!(title: "#{@album.name} Cover", is_cover: true,) do
+        |image| # Aquí pasamos el objeto UploadedFile
           image.photo.attach(cover_file[:photo])
         end
-        flash[:notice] = "Portada adjuntada exitosamente."
       end
       # --- B. Adjuntar Audio Único ---
       if audio_file.present?
         @album.create_audio! do |audio| audio.clip.attach(audio_file[:clip])
         end
-        flash[:notice] = (flash[:notice] || "") + " Audio adjuntado exitosamente."
       end
       redirect_to @album, notice: 'Álbum creado exitosamente.'
-    else # Si el álbum no se guarda (ej. por validaciones de `name`), renderiza el formulario
-      render :new, status: :unprocessable_entity
+    else render :new, status: :unprocessable_entity
     end
   rescue StandardError => e
-    # Captura errores en la subida o creación
     flash.now[:alert] = "Error al procesar los archivos: #{e.message}"
     render :new, status: :unprocessable_entity
   end
 
   # PATCH/PUT /albums/1 or /albums/1.json
+  # PATCH/PUT /albums/1
   def update
-    respond_to do |format| if @album.update(album_params)
-      format.html { redirect_to admin_album_path(@album), notice: "Album was successfully updated.", status: :see_other }
+    # 1. Separar los parámetros de los archivos adjuntos
+    cover_file = album_params[:photo]
+    audio_file = album_params[:clip]
+
+    if @album.update(album_params.except(:photo, :clip))
+      if cover_file.present?
+        @album.images.find_by(is_cover: true)&.destroy # Opción: eliminar la anterior
+        @album.images.create!(title: "#{@album.name} Portada", is_cover: true,) do |image| image.photo.attach(cover_file[:photo])
+        end
+      end
+
+      if audio_file.present?
+        if @album.audio.present?
+          @album.audio.clip.purge
+          @album.audio.clip.attach(audio_file[:clip])
+          @album.audio.save!
+        else @album.create_audio! do |audio| audio.clip.attach(audio_file[:clip])
+        end
+        end
+      end
+      respond_to do |format| format.html { redirect_to admin_album_path(@album), notice: "Álbum y archivos actualizados con éxito." }
       format.json { render :show, status: :ok, location: @album }
-    else format.html { render :edit, status: :unprocessable_entity }
-    format.json { render json: @album.errors, status: :unprocessable_entity }
+      end
+    else # Si la actualización de atributos básicos falla
+      respond_to do |format| format.html { render :edit, status: :unprocessable_entity }
+      format.json { render json: @album.errors, status: :unprocessable_entity }
+      end
     end
-    end
+  rescue StandardError => e
+    flash.now[:alert] = "Error al procesar los archivos: #{e.message}"
+    render :edit, status: :unprocessable_entity
   end
 
   def disabled_enabled
@@ -99,23 +116,14 @@ correctamente habilitado/deshabilitado."
 
   # Only allow a list of trusted parameters through.
   def album_params
-    params.require(:album).permit(
-      :name,
-      :description,
-      :unit_price,
-      :stock_available,
-      :genre_id,
-      :year,
-      :media_type,
-      :condition_is_new,
-      :author_id,
-      :deleted_at,
+    Rails.logger.debug "Album Params Recibidos: #{params.inspect}"
+    params.require(:album).permit(:name, :description, :unit_price, :stock_available, :genre_id, :year, :media_type, :condition_is_new, :author_id, :deleted_at,
 
       # Permite el hash anidado 'photo' y los campos permitidos dentro de él
-      photo: [:photo, :is_cover, :title],
+      photo: [ :photo],
 
       # Permite el hash anidado 'clip' y el campo permitido dentro de él
-      clip: [:clip]
+      clip: [ :clip ]
     )
   end
 
