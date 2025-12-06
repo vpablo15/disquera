@@ -54,13 +54,13 @@ class Admin::AlbumsController < ApplicationController
   # PATCH/PUT /albums/1 or /albums/1.json
   # PATCH/PUT /albums/1
   def update
+    Rails.logger.info "Update: Params Recibidos: #{params.inspect}"
     # 1. Separar los parámetros de los archivos adjuntos
     cover_file = album_params[:photo]
     audio_file = album_params[:clip]
 
     if @album.update(album_params.except(:photo, :clip))
       if cover_file.present?
-        @album.images.find_by(is_cover: true)&.destroy # Opción: eliminar la anterior
         @album.images.create!(title: "#{@album.name} Portada", is_cover: true,) do |image| image.photo.attach(cover_file[:photo])
         end
       end
@@ -69,7 +69,6 @@ class Admin::AlbumsController < ApplicationController
         if @album.audio.present?
           @album.audio.clip.purge
           @album.audio.clip.attach(audio_file[:clip])
-          @album.audio.save!
         else @album.create_audio! do |audio| audio.clip.attach(audio_file[:clip])
         end
         end
@@ -123,7 +122,8 @@ correctamente habilitado/deshabilitado."
       photo: [ :photo],
 
       # Permite el hash anidado 'clip' y el campo permitido dentro de él
-      clip: [ :clip ]
+      clip: [ :clip ],
+      images_attributes: [:id, :is_cover, :_destroy] # ¡Debe ser permitida!
     )
   end
 

@@ -1,7 +1,7 @@
 <%# app/views/admin/albums/_form.html.erb %>
 
 <%# El formulario recibe el objeto 'album' como variable local %>
-<%= form_with model: [:admin, album], data: { turbo: true } do |f| %>
+<%= form_with model: [ :admin, album ], data: { turbo: true } do |f| %>
 
   <%# Mostrar errores de validación, si existen %>
   <%= render "shared/error_display", resource: album %>
@@ -23,106 +23,165 @@
     <div class="row">
       <div class="col-md-6 mb-3">
         <%= f.label :author_id, "Artista", class: "form-label" %>
-        <%= f.collection_select :author_id, authors, :id, :full_name,
-          { prompt: "Seleccione un autor" }, { class: "form-select" } %>
+        <%= f.collection_select :author_id, authors, :id, :full_name, { prompt: "Seleccione un autor" }, { class: "form-select" } %>
       </div>
-    </div>
 
-    <div class="col-md-6 mb-3">
-      <%= f.label :genre_id, "Género", class: "form-label" %>
-      <%# Asume que tienes un helper o un scope para listar los géneros %>
-      <%= f.collection_select :genre_id, genres, :id, :name,
-        { prompt: "Seleccione un género" }, { class: "form-select" } %>
-    </div>
-  </div>
-
-  <%# Metadatos del Disco (Precio, Tipo de Medio, Año) %>
-  <div class="row">
-    <div class="col-md-4 mb-3">
-      <%= f.label :unit_price, "Precio Unitario", class: "form-label" %>
-      <%= f.number_field :unit_price, step: 0.01, class: "form-control" %>
-    </div>
-
-    <div class="col-md-4 mb-4">
-      <%= f.label :media_type, "Tipo de Medio", class: "form-label" %>
-      <%# Usa el enum :media_type (Vinyl, CD) %>
-      <%= f.select :media_type, Album.media_types.keys.map { |k| [k.humanize, k] },
-        { prompt: "Seleccionar tipo" }, { class: "form-select" } %>
-    </div>
-
-    <div class="col-md-4 mb-3">
-      <%= f.label :year, "Año de Lanzamiento", class: "form-label" %>
-      <%= f.number_field :year, min: 1900, max: Time.now.year, class: "form-control" %>
-    </div>
-  </div>
-
-  <hr class="my-3">
-
-  <div class="row">
-    <div class="col-md-6 mb-3">
-      <%= f.label :stock_available, "Stock Disponible", class: "form-label" %>
-      <%# Aseguramos que sea un campo numérico entero %>
-      <%= f.number_field :stock_available, min: 0, class: "form-control" %>
-    </div>
-
-    <div class="col-md-6 d-flex align-items-end mb-3">
-      <div class="mb-3 w-100">
-        <%= f.label :condition_is_new, "Condición", class: "form-label" %>
-        <%= f.select :condition_is_new,
-          [["Nuevo", true], ["Usado", false]],
-          { prompt: "Seleccione condición" },
-          { class: "form-select" } %>
+      <div class="col-md-6 mb-3">
+        <%= f.label :genre_id, "Género", class: "form-label" %>
+        <%# Asume que tienes un helper o un scope para listar los géneros %>
+        <%= f.collection_select :genre_id, genres, :id, :name, { prompt: "Seleccione un género" }, { class: "form-select" } %>
       </div>
-    </div>
 
-    <div class="row">
-      <%= f.fields_for :clip, @album.audio do |audio_fields| %>
+      <%# Metadatos del Disco (Precio, Tipo de Medio, Año) %>
+      <div class="row">
+        <div class="col-md-4 mb-3">
+          <%= f.label :unit_price, "Precio Unitario", class: "form-label" %>
+          <%= f.number_field :unit_price, step: 0.01, class: "form-control" %>
+        </div>
+
+        <div class="col-md-4 mb-4">
+          <%= f.label :media_type, "Tipo de Medio", class: "form-label" %>
+          <%# Usa el enum :media_type (Vinyl, CD) %>
+          <%= f.select :media_type, Album.media_types.keys.map { |k| [ k.humanize, k ] }, { prompt: "Seleccionar tipo" }, { class: "form-select" } %>
+        </div>
+
+        <div class="col-md-4 mb-3">
+          <%= f.label :year, "Año de Lanzamiento", class: "form-label" %>
+          <%= f.number_field :year, min: 1900, max: Time.now.year, class: "form-control" %>
+        </div>
+      </div>
+
+      <hr class="my-3">
+
+      <div class="row">
         <div class="col-md-6 mb-3">
-          <fieldset>
-            <legend class="h6 text-primary">Pista de Audio Principal</legend>
-            <p class="form-text mt-0">Sube el archivo de audio (MP3, WAV, etc.) para la previsualización del álbum.</p>
+          <%= f.label :stock_available, "Stock Disponible", class: "form-label" %>
+          <%# Aseguramos que sea un campo numérico entero %>
+          <%= f.number_field :stock_available, min: 0, class: "form-control" %>
+        </div>
 
-            <div class="input-group">
-              <span class="input-group-text"><i class="bi bi-music-note"></i></span>
-              <%= audio_fields.file_field :clip, class: "form-control", accept: "audio/*", title: "Seleccionar archivo de audio" %>
-            </div>
-            <%# Puedes añadir un placeholder para el archivo existente si lo tienes %>
-            <% if audio_fields.object.present? && audio_fields.object.clip.attached? %>
-              <div class="form-text">
-                Archivo actual: <%= audio_fields.object.clip.filename %>
+        <div class="col-md-6 d-flex align-items-end mb-3">
+          <div class="mb-3 w-100">
+            <%= f.label :condition_is_new, "Condición", class: "form-label" %>
+            <%= f.select :condition_is_new, [ [ "Nuevo", true ], [ "Usado", false ] ], { prompt: "Seleccione condición" }, { class: "form-select" } %>
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <%# 1. Columna de Audio Principal (Ocupa la mitad del ancho en pantallas medianas y grandes) %>
+        <div class="col-md-6 mb-3">
+          <%= f.fields_for :clip, @album.audio do |audio_fields| %>
+            <fieldset>
+              <legend class="h6 text-primary">Pista de Audio Principal
+              </legend>
+              <p class="form-text mt-0">Sube el archivo de audio (MP3, WAV,
+                etc.)
+                para la previsualización del álbum.</p>
+
+              <div class="input-group">
+                <span class="input-group-text"><i class="bi bi-music-note"></i></span>
+                <%= audio_fields.file_field :clip, class: "form-control", accept: "audio/*", title: "Seleccionar archivo de audio" %>
               </div>
+              <%# Puedes añadir un placeholder para el archivo existente si lo tienes %>
+              <% if audio_fields.object.present? && audio_fields.object.clip.attached? %>
+                <div class="form-text">
+                  Archivo actual: <%= audio_fields.object.clip.filename %>
+                </div>
+              <% end %>
+            </fieldset>
+          <% end %>
+        </div>
+
+        <div class="col-md-6 mb-3">
+          <%= f.fields_for :photo, @album.images.first do |image_fields| %>
+            <fieldset>
+              <legend class="h6 text-primary">Portada del Álbum (Imagen)
+              </legend>
+              <p class="form-text mt-0">Sube el archivo de imagen para la
+                portada</p>
+
+              <div class="input-group">
+                <span class="input-group-text"><i class="bi bi-image"></i></span>
+                <%= image_fields.file_field :photo, class: "form-control", title: "Seleccionar archivo de portada", accept: "image/*" %>
+              </div>
+
+              <%# Opcional: Mostrar el archivo actual si existe %>
+              <% if image_fields.object.present? && image_fields.object.photo.attached? %>
+                <div class="form-text">
+                  Archivo actual: <%= image_fields.object.photo.filename %>
+                </div>
+              <% end %>
+
+              <%= image_fields.hidden_field :is_cover, value: true %>
+              <%= image_fields.hidden_field :title, value: "Portada" %>
+            </fieldset>
+          <% end %>
+        </div>
+      </div>
+
+      <hr>
+
+
+      <% if @album.images.any? { |image| image.photo.attached? } %>
+        <div class="mb-4 p-3 border rounded bg-light">
+          <h5 class="text-primary">Gestión de Imágenes Existentes</h5>
+          <table class="table table-sm">
+            <thead>
+            <tr>
+              <th>Vista Previa</th>
+              <th>Nombre del Archivo</th>
+              <th>Portada (`is_cover`)</th>
+              <th>Eliminar (`_destroy`)</th>
+            </tr>
+            </thead>
+            <tbody>
+
+
+            <%= f.fields_for :images do |image_fields| %>
+
+              <tr class="align-middle">
+                <td>
+                  <% if image_fields.object.photo.attached? %>
+                    <%= image_tag image_fields.object.photo.representation(resize_to_limit: [ 50, 50 ]), class: "img-thumbnail" %>
+                  <% else %>
+                    (Sin archivo)
+                  <% end %>
+                </td>
+                <td>
+                  <% if image_fields.object.photo.attached? %>
+                    <%= image_fields.object.photo.filename %>
+                  <% else %>
+                    <%= image_fields.object.title %>
+                  <% end %>
+                </td>
+
+                <%= image_fields.hidden_field :id %>
+
+                <td>
+                  <div class="form-check">
+                    <%= image_fields.check_box :is_cover, { class: "form-check-input" }, 'true', 'false' %>
+                  </div>
+                </td>
+
+                <td>
+                  <div class="form-check">
+                    <%= image_fields.check_box :_destroy, { class: "form-check-input" }, true, false %>
+                  </div>
+                </td>
+              </tr>
             <% end %>
-          </fieldset>
+
+            </tbody>
+          </table>
         </div>
       <% end %>
 
-      <%= f.fields_for :photo, @album.images.first do |image_fields| %>
-        <div class="col-md-6 mb-3">
-          <fieldset>
-            <legend class="h6 text-primary">Portada del Álbum (Imagen)</legend>
-            <p class="form-text mt-0">Sube el archivo de imagen (JPG, PNG) para la portada principal.</p>
-
-            <div class="input-group">
-              <span class="input-group-text"><i class="bi bi-image"></i></span>
-              <%= image_fields.file_field :photo, class: "form-control", accept: "image/*", title: "Seleccionar imagen de portada" %>
-            </div>
-            <%# Puedes añadir un placeholder para el archivo existente si lo tienes %>
-            <% if image_fields.object.present? && image_fields.object.photo.attached? %>
-              <div class="form-text">
-                Archivo actual: <%= image_fields.object.photo.filename %>
-              </div>
-            <% end %>
-
-          </fieldset>
-        </div>
-      <% end %>
     </div>
-
-
-
-    <%# El campo deleted_at se omite intencionalmente ya que no debería ser manipulado por el usuario en esta vista. %>
-
   </div>
+
+
+  <%# El campo deleted_at se omite intencionalmente ya que no debería ser manipulado por el usuario en esta vista. %>
 
   <div class="w-100 d-flex justify-content-end flex-row gap-2">
     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
