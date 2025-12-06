@@ -33,8 +33,7 @@ class Admin::AlbumsController < ApplicationController
 
     if @album.save
       if cover_file.present?
-        @album.images.create!(title: "#{@album.name} Cover", is_cover: true,) do
-        |image| # Aquí pasamos el objeto UploadedFile
+        @album.images.create!(title: "#{@album.name} Cover", is_cover: true,) do |image| # Aquí pasamos el objeto UploadedFile
           image.photo.attach(cover_file[:photo])
         end
       end
@@ -54,14 +53,13 @@ class Admin::AlbumsController < ApplicationController
   # PATCH/PUT /albums/1 or /albums/1.json
   # PATCH/PUT /albums/1
   def update
-    Rails.logger.info "Update: Params Recibidos: #{params.inspect}"
     # 1. Separar los parámetros de los archivos adjuntos
     cover_file = album_params[:photo]
     audio_file = album_params[:clip]
 
     if @album.update(album_params.except(:photo, :clip))
       if cover_file.present?
-        @album.images.create!(title: "#{@album.name} Portada", is_cover: true,) do |image| image.photo.attach(cover_file[:photo])
+        @album.images.create!(title: "#{@album.name} Portada", is_cover: false) do |image| image.photo.attach(cover_file[:photo])
         end
       end
 
@@ -113,18 +111,36 @@ correctamente habilitado/deshabilitado."
     @genres = Genre.all
   end
 
-  # Only allow a list of trusted parameters through.
+  def set_single_cover_image_status(permitted_params, cover_id)
+    processed_params = permitted_params.dup
+    cover_id_to_match = cover_id.to_s
+
+    if cover_id_to_match.present? && processed_params[:images_attributes].present?
+      processed_params[:images_attributes].each do |index, img|
+        image_id = img[:id].to_s
+        if image_id == cover_id_to_match
+          img[:is_cover] = true
+        else
+          img[:is_cover] = false
+        end
+      end
+    end
+    processed_params
+  end
+
   def album_params
     Rails.logger.debug "Album Params Recibidos: #{params.inspect}"
-    params.require(:album).permit(:name, :description, :unit_price, :stock_available, :genre_id, :year, :media_type, :condition_is_new, :author_id, :deleted_at,
 
-      # Permite el hash anidado 'photo' y los campos permitidos dentro de él
-      photo: [ :photo],
+    # 1. CORRECCIÓN: Requerir el hash :album
+    p = params.require(:album).permit(
+      :name, :description, :unit_price, :stock_available, :genre_id, :year,
+      :media_type, :condition_is_new, :author_id, :deleted_at,
 
-      # Permite el hash anidado 'clip' y el campo permitido dentro de él
+      photo: [ :photo ],
       clip: [ :clip ],
-      images_attributes: [:id, :is_cover, :_destroy] # ¡Debe ser permitida!
+      images_attributes: [ :id, :is_cover, :_destroy ]
     )
+    set_single_cover_image_status(p, params[:cover_image_id])
   end
 
 end

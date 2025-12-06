@@ -106,13 +106,6 @@
                 <%= image_fields.file_field :photo, class: "form-control", title: "Seleccionar archivo de portada", accept: "image/*" %>
               </div>
 
-              <%# Opcional: Mostrar el archivo actual si existe %>
-              <% if image_fields.object.present? && image_fields.object.photo.attached? %>
-                <div class="form-text">
-                  Archivo actual: <%= image_fields.object.photo.filename %>
-                </div>
-              <% end %>
-
               <%= image_fields.hidden_field :is_cover, value: true %>
               <%= image_fields.hidden_field :title, value: "Portada" %>
             </fieldset>
@@ -159,11 +152,17 @@
                 <%= image_fields.hidden_field :id %>
 
                 <td>
-                  <div class="form-check">
-                    <%= image_fields.check_box :is_cover, { class: "form-check-input" }, 'true', 'false' %>
+                  <div class="form-check text-center">
+                    <%= image_fields.radio_button :id_cover,
+                      image_fields.object.id,
+                      {
+                        class: "form-check-input",
+                        checked: image_fields.object.is_cover?,
+                        name: "cover_image_id"
+                      }
+                    %>
                   </div>
                 </td>
-
                 <td>
                   <div class="form-check">
                     <%= image_fields.check_box :_destroy, { class: "form-check-input" }, true, false %>
