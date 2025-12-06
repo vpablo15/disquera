@@ -1,18 +1,70 @@
 <% content_for :admin_content do %>
-<p style="color: green"><%= notice %></p>
 
-<% content_for :title, "Genres" %>
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h2 class="mb-0 text-dark">
+      <i class="fas fa-layer-group me-2"></i> Listado de Géneros
+    </h2>
 
-<h1>Genres</h1>
+    <%# Asumiendo que hay un helper 'can?' para autorización, similar al ejemplo anterior %>
+    <% if defined?(can?) && can?(:create, Genre) %>
+      <%= link_to "Nuevo Género", new_admin_genre_path, class: "btn btn-primary" %>
+    <% end %>
+  </div>
 
-<div id="genres">
-  <% @genres.each do |genre| %>
-    <%= render genre %>
-    <p>
-      <%= link_to "Show this genre", admin_genre_path(genre) %>
-    </p>
+  <%# Muestra el mensaje de aviso (notice) %>
+  <% if notice.present? %>
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+      <%= notice %>
+      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
   <% end %>
-</div>
 
-<%= link_to "New genre", new_admin_genre_path %>
+  <div class="card shadow-lg border-0">
+    <div class="card-body p-0">
+      <div class="table-responsive">
+        <table class="table table-striped table-hover mb-0 align-middle">
+          <thead class="table-dark">
+          <tr>
+            <th scope="col" style="width: 5%">ID</th>
+            <th scope="col">Nombre del Género</th>
+            <th scope="col" style="width: 20%">Registrado</th>
+            <th scope="col" class="text-center" style="width: 20%">Acciones</th>
+          </tr>
+          </thead>
+          <tbody>
+          <% @genres.each do |genre| %>
+            <tr data-genre-id="<%= genre.id %>">
+              <th scope="row"><%= genre.id %></th>
+              <td>
+                <%# Asumiendo que el modelo 'Genre' tiene un atributo 'name' %>
+                <%= genre.name %>
+              </td>
+              <td><%= genre.created_at.strftime("%d/%m/%Y") %></td>
+
+              <td class="d-flex flex-row flex-wrap w-100 h-100 gap-2 justify-content-center">
+
+                <%# Botón Editar %>
+                <%= link_to "Editar", edit_admin_genre_path(genre), class: "btn btn-sm btn-warning" %>
+
+                <%# Botón Eliminar con Turbo y Confirmación %>
+                <%= link_to "Eliminar", admin_genre_path(genre),
+                  data: {
+                    turbo_method: :delete,
+                    turbo_confirm: "¿Estás seguro de que quieres eliminar el género '#{genre.name}'?",
+                  },
+                  class: "btn btn-sm btn-danger" %>
+              </td>
+            </tr>
+          <% end %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <% if @genres.empty? %>
+    <div class="alert alert-warning mt-4" role="alert">
+      No hay géneros registrados en el sistema.
+    </div>
+  <% end %>
 <% end %>
