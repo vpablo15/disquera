@@ -17,12 +17,43 @@ es:
 
   activerecord:
 
+    models:
+      user:
+        one: Usuario
+        other: Usuarios
+      albums:
+        one: Álbum
+        other: Álbumes
+      authors:
+        one: Autor
+        other: Autores
+      genres:
+        one: Género
+        other: Géneros
+
     attributes:
       user:
         email: Correo electrónico
         password: Contraseña
         password_confirmation: Confirmación de contraseña
         remember_me: Recordarme
+      albums:
+        # Atributos traducidos de la migración:
+        name: Nombre
+        description: Descripción
+        unit_price: Precio unitario
+        stock_available: Stock disponible
+        category: Categoría
+        media_type: Tipo de medio # Nombre del campo
+        condition_is_new: Es nuevo
+        deleted_at: Eliminado en
+
+        # Relaciones traducidas (foreign keys)
+        author: Autor
+        genre: Género
+          # images: Imágenes (Aunque no es común validarlo, se puede traducir)
+          # audio: Audio (Aunque no es común validarlo, se puede traducir)
+
 
     errors:
       messages:
@@ -31,11 +62,6 @@ es:
         confirmation: "no coincide con las contraseñas"
         too_short: "es demasiado corto (mínimo %{count} caracteres)"
         invalid: "es inválido"
-
+        required: "debe proporcionarse"
         too_long: "es demasiado largo (máximo %{count} caracteres)"
         not_a_number: "no es un número"
-
-      models:
-        user:
-          one: Usuario
-          other: Usuarios
