@@ -1,0 +1,112 @@
+<% content_for :admin_content do %>
+  <% content_for :title, "Detalle del Usuario" %>
+
+  <div class="d-flex justify-content-between align-items-center mb-4 border-bottom pb-2">
+    <h1 class="h3 mb-0 text-dark">
+      <i class="fas fa-user-shield me-2"></i> Usuario: <span class="fw-bold text-primary"><%= @user.email %></span>
+    </h1>
+  </div>
+
+  <div class="card shadow-lg border-0 mb-4">
+    <div class="card-header bg-light border-bottom">
+      <h5 class="mb-0 fw-semibold text-dark">
+        <i class="fas fa-info-circle me-1"></i> Información General
+      </h5>
+    </div>
+    <div class="card-body p-4">
+      <dl class="row mb-0">
+
+        <dt class="col-sm-4 text-muted pt-2"><i class="fas fa-at me-2"></i> Email:</dt>
+        <dd class="col-sm-8 pt-2">
+          <h4 class="fw-bolder mb-0 text-dark"><%= @user.email %></h4>
+        </dd>
+
+        <hr class="mt-3 mb-3">
+
+        <dt class="col-sm-4 text-muted"><i class="fas fa-hashtag me-2"></i> ID de Registro:</dt>
+        <dd class="col-sm-8 fw-bold text-muted"><%= @user.id %></dd>
+
+        <dt class="col-sm-4 text-muted"><i class="fas fa-shield-alt me-2"></i> Rol:</dt>
+        <dd class="col-sm-8">
+          <% role_color = case @user.role.to_s when 'admin' then 'danger' when 'manager' then 'warning' else 'success' end %>
+          <span class="badge bg-<%= role_color %> fs-6 fw-bold">
+            <%= @user.role.to_s.humanize %>
+          </span>
+        </dd>
+
+        <dt class="col-sm-4 text-muted"><i class="fas fa-calendar-plus me-2"></i> Creado el:</dt>
+        <dd class="col-sm-8 fw-bold"><%= @user.created_at.strftime("%d/%m/%Y") %><span class="text-secondary small ms-2">(a las <%= @user.created_at.strftime("%H:%M") %>)</span></dd>
+
+        <% if @user.updated_at != @user.created_at %>
+          <dt class="col-sm-4 text-muted"><i class="fas fa-redo-alt me-2"></i> Última Modificación:</dt>
+          <dd class="col-sm-8 fw-bold text-info"><%= @user.updated_at.strftime("%d/%m/%Y") %><span class="text-secondary small ms-2">(a las <%= @user.updated_at.strftime("%H:%M") %>)</span></dd>
+        <% end %>
+      </dl>
+    </div>
+  </div>
+
+<!--  <div class="card shadow-lg border-0 mb-4">-->
+<!--    <div class="card-header bg-dark text-white">-->
+<!--      <h5 class="mb-0 fw-semibold">-->
+<!--        <i class="fas fa-lock me-1"></i> Seguridad y Acceso (Devise)-->
+<!--      </h5>-->
+<!--    </div>-->
+<!--    <div class="card-body p-4">-->
+<!--      <dl class="row mb-0">-->
+
+<!--        <dt class="col-sm-4 text-muted"><i class="fas fa-cookie-bite me-2"></i> Sesión Recordada:</dt>-->
+<!--        <dd class="col-sm-8">-->
+          <%# if @user.remember_created_at.present? %>
+<!--            <span class="text-success fw-bold">Sí, desde <%#= time_ago_in_words(@user.remember_created_at) %> atrás</span>-->
+          <%# else %>
+<!--            <span class="text-danger fw-bold">No</span>-->
+          <%# end %>
+<!--        </dd>-->
+
+<!--        <hr class="mt-3 mb-3">-->
+
+<!--        <dt class="col-sm-4 text-muted"><i class="fas fa-key me-2"></i> Token de Recuperación:</dt>-->
+<!--        <dd class="col-sm-8">-->
+          <%# if @user.reset_password_token.present? %>
+<!--            <span class="text-warning fw-bold">Pendiente (expira <%#= time_ago_in_words(@user.reset_password_sent_at) %>)</span>-->
+          <%# else %>
+<!--            <span class="text-success">No hay solicitudes recientes.</span>-->
+          <%# end %>
+<!--        </dd>-->
+
+        <%# if @user.respond_to?(:sign_in_count) && @user.sign_in_count.to_i > 0 %>
+<!--          <hr class="mt-3 mb-3">-->
+<!--          <dt class="col-sm-4 text-muted"><i class="fas fa-chart-line me-2"></i> Sesiones Totales:</dt>-->
+<!--          <dd class="col-sm-8 fw-bold"><%#= @user.sign_in_count %></dd>-->
+
+<!--          <dt class="col-sm-4 text-muted"><i class="fas fa-map-marker-alt me-2"></i> IP del Último Acceso:</dt>-->
+<!--          <dd class="col-sm-8"><%#= @user.last_sign_in_ip.presence || 'N/A' %></dd>-->
+        <%# end %>
+
+<!--      </dl>-->
+<!--    </div>-->
+<!--  </div>-->
+
+  <div class="d-flex gap-2 justify-content-start mt-4">
+
+    <%# Volver (Principal y a la izquierda) %>
+    <%= link_to admin_users_path, class: "btn btn-outline-secondary" do %>
+      <i class="fas fa-arrow-left me-1"></i> Volver a Usuarios
+    <% end %>
+
+    <div class="ms-auto d-flex gap-2">
+      <%# Editar (Como admin) %>
+      <%= link_to edit_admin_user_path(@user), class: "btn btn-warning" do %>
+        <i class="fas fa-pencil-alt me-1"></i> Editar Usuario
+      <% end %>
+
+      <%# Eliminar (Como admin) %>
+      <%= button_to [:admin, @user],
+        method: :delete,
+        data: { turbo_confirm: "¿Estás seguro de que quieres eliminar al usuario '#{@user.email}'?" },
+        class: "btn btn-danger" do %>
+        <i class="fas fa-trash-alt me-1"></i> Eliminar Usuario
+      <% end %>
+    </div>
+  </div>
+<% end %>

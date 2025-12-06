@@ -1,12 +1,60 @@
 <% content_for :admin_content do %>
-<p style="color: green"><%= notice %></p>
+  <% content_for :title, "Detalle del Género" %>
 
-<%= render @genre %>
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h2 class="mb-0 text-dark">
+      <i class="fas fa-layer-group me-2"></i> Detalle del Género
+    </h2>
+  </div>
 
-<div>
-  <%= link_to "Edit this genre", edit_admin_genre_path(@genre) %> |
-  <%= link_to "Back to genres", admin_genres_path %>
+  <%# Muestra el mensaje de aviso (notice) %>
+  <% if notice.present? %>
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+      <%= notice %>
+      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+  <% end %>
 
-  <%= button_to "Destroy this genre", [:admin, @genre], method: :delete %>
-</div>
+  <div class="card shadow-lg border-0 mb-4">
+    <div class="card-header bg-info text-white">
+      <h5 class="mb-0">Información del Género</h5>
+    </div>
+    <div class="card-body">
+      <%# Información Principal: Utilizamos una lista de definición de Bootstrap %>
+      <dl class="row mb-0">
+        <dt class="col-sm-3">ID:</dt>
+        <dd class="col-sm-9"><%= @genre.id %></dd>
+
+        <dt class="col-sm-3">Nombre del Género:</dt>
+        <dd class="col-sm-9">
+          <%# 👈 CAMBIO AQUÍ: Texto normal sin <h4> ni clase text-info %>
+          <%= @genre.name %>
+        </dd>
+
+        <dt class="col-sm-3">Fecha de Creación:</dt>
+        <dd class="col-sm-9"><%= @genre.created_at.strftime("%d/%m/%Y a las %H:%M") %></dd>
+
+        <%# Opcional: Mostrar última actualización si es diferente a la creación %>
+        <% if @genre.updated_at != @genre.created_at %>
+          <dt class="col-sm-3">Última Actualización:</dt>
+          <dd class="col-sm-9"><%= @genre.updated_at.strftime("%d/%m/%Y a las %H:%M") %></dd>
+        <% end %>
+      </dl>
+    </div>
+  </div>
+
+  <%# 2. Botones de Acción (CRUD) %>
+  <div class="d-flex gap-2">
+    <%# Editar %>
+    <%= link_to "Editar Género", edit_admin_genre_path(@genre), class: "btn btn-warning" %>
+
+    <%# Volver %>
+    <%= link_to "Volver a Géneros", admin_genres_path, class: "btn btn-secondary" %>
+
+    <%# Eliminar %>
+    <%= button_to "Eliminar Género", [:admin, @genre],
+      method: :delete,
+      data: { turbo_confirm: "¿Estás seguro de que quieres eliminar el género '#{@genre.name}'?" },
+      class: "btn btn-danger" %>
+  </div>
 <% end %>
