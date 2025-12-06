@@ -12,7 +12,7 @@
       <%= image_tag "no_image.jpg", alt: "Imagen no disponible", class:"w-50 rounded" %>
     <% end %>
     
-    <div class="d-flex flex-column w-50 fs-5">
+    <div class="d-flex flex-column w-50 my-3 fs-5">
       <div>
         <strong>Nombre:</strong>
         <p class="px-2"><%= @album.name %></p>
@@ -71,6 +71,87 @@
         <p>El clip de audio no está disponible para este álbum.</p>
       <% end %>
     <% end %>
+  </div>
+
+<%# 1. Filtrar las imágenes que tienen un adjunto real en Active Storage %>
+<% attached_images = @album.images.select { |img| img.photo.attached? } %>
+
+<%# 2. CONDICIONAL: Mostrar el carrusel solo si hay imágenes adjuntas %>
+<% if attached_images.present? %>
+
+  <div id="albumCarouselIndicators" class="carousel slide w-50 m-auto mb-3" data-bs-ride="carousel">
+    
+    <%# === BLOQUE 1: INDICADORES === %>
+    <div class="carousel-indicators">
+      <% attached_images.each_with_index do |image, index| %>
+        <button type="button" 
+                data-bs-target="#albumCarouselIndicators" 
+                data-bs-slide-to="<%= index %>" 
+                class="<%= 'active' if index == 0 %>" <%# Asigna 'active' solo al primero %>
+                aria-current="<%= 'true' if index == 0 %>" 
+                aria-label="Slide <%= index + 1 %>">
+        </button>
+      <% end %>
     </div>
     
+    <%# === BLOQUE 2: SLIDES (IMÁGENES) === %>
+    <div class="carousel-inner">
+      <% attached_images.each_with_index do |image, index| %>
+        
+        <div class="carousel-item <%= 'active' if index == 0 %>"> <%# Asigna 'active' solo al primero %>
+          
+          <%# Usamos image_tag con el método .photo y un variante para optimizar el tamaño %>
+          <%= image_tag image.photo, class: "d-block w-100", alt: image.title %>
+                        
+          <%# Opcional: Caption para mostrar el título/descripción %>
+          <div class="carousel-caption d-none d-md-block">
+            <h5><%= image.title %></h5>
+            <p><%= image.short_description %></p>
+          </div>
+        </div>
+        
+      <% end %>
+    </div>
+    
+    <%# === BLOQUE 3: CONTROLES (Flechas de navegación) === %>
+    <button class="carousel-control-prev" type="button" data-bs-target="#albumCarouselIndicators" data-bs-slide="prev">
+      <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+      <span class="visually-hidden">Previous</span>
+    </button>
+    <button class="carousel-control-next" type="button" data-bs-target="#albumCarouselIndicators" data-bs-slide="next">
+      <span class="carousel-control-next-icon" aria-hidden="true"></span>
+      <span class="visually-hidden">Next</span>
+    </button>
+    
+  </div>
+<% end %>
+  <% related_albums = @album.related_albums%>
+  <% if related_albums %>
+    <h2 class="text-center mt-5 fw-bold">Discos Relacionados</h2>
+    <div id="albums" class="d-flex justify-content-center flex-wrap">
+      <% related_albums.each do |album| %>
+        <div class="card m-2" style="width: 18rem;">
+          <% cover_image = album.images.find_by(is_cover: true) %>
+
+          <% if cover_image&.photo&.attached? %>
+            <% # 2. Usa image_tag con el método 'photo' definido en el modelo Image %>
+            <%= image_tag cover_image.photo, class:"card-img-top" %> 
+          <% else %>
+            <%= image_tag "no_image.jpg", alt: "Imagen no disponible", class:"card-img-top" %>
+          <% end %>
+          <div class="card-body">
+            <h5 class="card-title mb-1"><%= album.name %></h5>
+            <p class="mb-1"><b>Artista: </b><%= album.author.full_name %></p>
+            <p class="mb-1"><b>Género: </b><%= album.genre.name %></p>
+            <p class="mb-1"><b>Condición: </b><%= album.condition_is_new ? "Nuevo" : "Usado" %></p>
+            <p class="mb-1"><b>Año: </b><%= album.year %></p>
+            <p class=""><b>Tipo: </b><%= album.media_type_before_type_cast %></p>
+            <p class="card-text"><%= album.description %></p>
+
+            <%= link_to "Ver Disco", album, class:"btn btn-primary" %>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  <% end %>
 <% end %>

@@ -4,9 +4,13 @@ class Album < ApplicationRecord
   belongs_to :genre
   has_many :images, dependent: :destroy # Las imágenes se borran si el disco se borra
   has_one :audio, dependent: :destroy # El audio se borra si el disco se borra
+
   accepts_nested_attributes_for :images,
     allow_destroy: true,
     reject_if: :all_blank
+
+  has_many :sale_items
+
 
   enum :media_type, {
     vinyl: "Vinilo",
@@ -28,4 +32,16 @@ class Album < ApplicationRecord
 
   # Scope para Soft Delete
   default_scope { where(deleted_at: nil) }
+
+  def related_albums
+    # Definir la consulta base para el Autor
+    by_author = Album.where(author_id: self.author_id)
+                     .where.not(id: self.id)
+    # Definir la consulta base para el Género
+    by_genre = Album.where(genre_id: self.genre_id)
+                    .where.not(id: self.id)
+
+    # Combinar ambas consultas usando OR y asegurar resultados únicos (distinct)
+    by_author.or(by_genre).distinct.limit(3)
+  end
 end
