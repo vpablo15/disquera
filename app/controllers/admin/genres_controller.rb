@@ -26,7 +26,8 @@ class Admin::GenresController < ApplicationController
 
     respond_to do |format|
       if @genre.save
-        format.html { redirect_to admin_genres_path(@genre), notice: "Genre was successfully created." }
+        format.html { redirect_to admin_genre_path(@genre), notice: "Genre was
+successfully created." }
         format.json { render :show, status: :created, location: @genre }
       else
         format.html { render :new, status: :unprocessable_entity }
@@ -39,7 +40,7 @@ class Admin::GenresController < ApplicationController
   def update
     respond_to do |format|
       if @genre.update(genre_params)
-        format.html { redirect_to admin_genres_path(@genre), notice: "Genre was successfully updated.", status: :see_other }
+        format.html { redirect_to admin_genre_path(@genre), notice: "Genre was successfully updated.", status: :see_other }
         format.json { render :show, status: :ok, location: @genre }
       else
         format.html { render :edit, status: :unprocessable_entity }

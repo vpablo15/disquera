@@ -1,4 +1,5 @@
 <% content_for :admin_content do %>
+  <% content_for :title, "Gestión de Géneros" %>
 
   <div class="d-flex justify-content-between align-items-center mb-4">
     <h2 class="mb-0 text-dark">
@@ -42,6 +43,9 @@
               <td><%= genre.created_at.strftime("%d/%m/%Y") %></td>
 
               <td class="d-flex flex-row flex-wrap w-100 h-100 gap-2 justify-content-center">
+
+                <%# 🟢 BOTÓN VER AGREGADO 🟢 %>
+                <%= link_to "Ver", admin_genre_path(genre), class: "btn btn-sm btn-info" %>
 
                 <%# Botón Editar %>
                 <%= link_to "Editar", edit_admin_genre_path(genre), class: "btn btn-sm btn-warning" %>
