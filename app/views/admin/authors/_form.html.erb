@@ -1,22 +1,31 @@
-<%= form_with(model: [:admin, author]) do |form| %>
-  <% if author.errors.any? %>
-    <div style="color: red">
-      <h2><%= pluralize(author.errors.count, "error") %> prohibited this author from being saved:</h2>
+<%= form_with(model: [:admin, author], class: "needs-validation", novalidate: true) do |form| %>
 
-      <ul>
-        <% author.errors.each do |error| %>
-          <li><%= error.full_message %></li>
-        <% end %>
-      </ul>
+  <%= render "shared/error_display", resource: form.object %>
+
+  <div class="mb-3">
+    <%= form.label :full_name, "Nombre Completo del Autor", class: "form-label" %>
+
+    <%= form.text_field :full_name,
+      class: "form-control #{author.errors[:full_name].present? ? 'is-invalid'
+       : ''}",
+    required: true,
+    placeholder: "Ej: Michael Jackson, AC/DC" %>
+
+    <div class="form-text text-muted">
+      Este campo es único. Introduce el nombre completo del autor.
     </div>
-  <% end %>
 
-  <div>
-    <%= form.label :full_name, style: "display: block" %>
-    <%= form.text_field :full_name %>
+    <% if author.errors[:full_name].present? %>
+      <div class="invalid-feedback">
+        <%= author.errors[:full_name].to_sentence.capitalize %>
+      </div>
+    <% end %>
   </div>
 
   <div>
-    <%= form.submit %>
+    <%= form.submit (author.persisted? ? "Guardar Cambios" : "Crear Autor"),
+      class: "btn btn-success me-2" %>
+
+    <%= link_to "Cancelar", admin_authors_path, class: "btn btn-secondary" %>
   </div>
 <% end %>

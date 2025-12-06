@@ -1,18 +1,65 @@
 <% content_for :admin_content do %>
-  <p style="color: green"><%= notice %></p>
+  <% content_for :title, "Gestión de Autores" %>
 
-  <% content_for :title, "Authors" %>
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h2 class="mb-0 text-dark">
+      <i class="fas fa-feather-alt me-2"></i> Listado de Autores
+    </h2>
 
-  <h1>Authors</h1>
-
-  <div id="authors">
-    <% @authors.each do |author| %>
-      <%= render author %>
-      <p>
-        <%= link_to "Show this author", admin_author_path(author) %>
-      </p>
+    <%# Botón para crear nuevo autor %>
+    <% if defined?(can?) && can?(:create, Author) %>
+      <%= link_to "Nuevo Autor", new_admin_author_path, class: "btn btn-primary" %>
     <% end %>
   </div>
 
-  <%= link_to "New author", new_admin_author_path %>
+  <div class="card shadow-lg border-0">
+    <div class="card-body p-0">
+      <div class="table-responsive">
+        <table class="table table-striped table-hover mb-0 align-middle">
+          <thead class="table-dark">
+          <tr>
+            <th scope="col" style="width: 5%">ID</th>
+            <th scope="col">Nombre Completo (full_name)</th>
+            <th scope="col" style="width: 20%">Registro</th>
+            <th scope="col" class="text-center" style="width: 20%">Acciones</th>
+          </tr>
+          </thead>
+          <tbody>
+          <% @authors.each do |author| %>
+            <tr data-author-id="<%= author.id %>">
+              <th scope="row"><%= author.id %></th>
+              <td>
+                <%# Muestra el campo único full_name %>
+                <%= author.full_name %>
+              </td>
+              <td><%= author.created_at.strftime("%d/%m/%Y") %></td>
+
+              <td class="d-flex flex-row flex-wrap w-100 h-100 gap-2 justify-content-center">
+                <%# Botón Ver %>
+                <%= link_to "Ver", admin_author_path(author), class: "btn btn-sm btn-info" %>
+
+                <%# Botón Editar %>
+                <%= link_to "Editar", edit_admin_author_path(author), class: "btn btn-sm btn-warning" %>
+
+                <%# Botón Eliminar con Turbo y Confirmación %>
+                <%= link_to "Eliminar", admin_author_path(author),
+                  data: {
+                    turbo_method: :delete,
+                    turbo_confirm: "¿Estás seguro de que quieres eliminar al autor '#{author.full_name}'?",
+                  },
+                  class: "btn btn-sm btn-danger" %>
+              </td>
+            </tr>
+          <% end %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <% if @authors.empty? %>
+    <div class="alert alert-warning mt-4" role="alert">
+      No hay autores registrados en el sistema.
+    </div>
+  <% end %>
 <% end %>
