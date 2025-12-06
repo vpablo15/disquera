@@ -22,10 +22,12 @@ Rails.application.routes.draw do
     resources :users, only: [ :index, :destroy, :update, :edit, :show, :new,
       :create ]
     resources :authors
+    resources :user_session, only: [ :new ]
 
     resources :albums
     patch "albums/disabled_enabled/:id", to: "albums#disabled_enabled", as: :album_disabled_enabled
   end
+
 
   # Healthcheck
   get "up" => "rails/health#show", as: :rails_health_check
