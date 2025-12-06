@@ -35,38 +35,32 @@
       <h6 class="text-uppercase text-muted mb-3 mt-1 small">Gestión</h6>
       <div class="list-group list-group-flush">
 
-        <!-- Acción 1: Listar Usuarios -->
+        <!-- Gestionar Usuarios -->
         <%= link_to admin_users_path, class: "list-group-item
         list-group-item-action
         py-2" do %>
-          <i class="fas fa-users me-2"></i> Listar Usuarios
+          <i class="fas fa-users me-2"></i> Gestionar Usuarios
         <% end %>
 
-        <!-- Acción 2: Listar Productos -->
-        <%= link_to "#", class: "list-group-item list-group-item-action py-2" do %>
-          <i class="fas fa-box-open me-2"></i> Listar Productos
+        <!-- Gestionar productos -->
+        <%= link_to admin_albums_path, class: "list-group-item list-group-item-action py-2" do %>
+          <i class="fas fa-box-open me-2"></i> Gestionar Productos
         <% end %>
 
-        <!-- Acción 3: Gestionar Ventas -->
+        <!-- Gestionar Ventas -->
         <%= link_to "#", class: "list-group-item list-group-item-action py-2" do %>
           <i class="fas fa-chart-line me-2"></i> Gestionar Ventas
         <% end %>
 
-        <!-- Acción 4: Listar Discos -->
-        <%= link_to admin_albums_path, class: "list-group-item list-group-item-action py-2" do %>
-          <i class="fas fa-box-open me-2"></i> Listar Discos
-        <% end %>
-
-        <!-- Acción 5: Listar Autores -->
+        <!-- Gestionar Autores -->
         <%= link_to admin_authors_path, class: "list-group-item list-group-item-action py-2" do %>
-          <i class="fas fa-box-open me-2"></i> Listar Autores
+          <i class="fas fa-box-open me-2"></i> Gestionar Autores
         <% end %>
 
-        <!-- Acción 6: Listar Géneros -->
+        <!-- Gestionar Géneros -->
         <%= link_to admin_genres_path, class: "list-group-item list-group-item-action py-2" do %>
-          <i class="fas fa-box-open me-2"></i> Listar Géneros
+          <i class="fas fa-box-open me-2"></i> Gestionar géneros
         <% end %>
-
       </div>
 
       <h6 class="text-uppercase text-muted mb-3 mt-4 small">Configuración</h6>
