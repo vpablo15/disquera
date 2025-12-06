@@ -19,7 +19,7 @@ Rails.application.routes.draw do
   namespace :admin do
     resources :genres
     root "admin#home"
-    resources :users, only: [ :index, :destroy, :update, :edit ]
+    resources :users, only: [ :index, :destroy, :update, :edit, :show ]
     resources :authors
 
     resources :albums
