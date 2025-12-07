@@ -97,7 +97,8 @@ correctamente habilitado/deshabilitado."
   def destroy
     @album.destroy!
 
-    respond_to do |format| format.html { redirect_to admin_albums_path, notice: "Album was successfully destroyed.", status: :see_other }
+    respond_to do |format| format.html { redirect_to admin_albums_path,
+      notice: "Album Fue eliminado exitosamente.", status: :see_other }
     format.json { head :no_content }
     end
   end
