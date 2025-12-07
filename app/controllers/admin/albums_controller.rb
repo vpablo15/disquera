@@ -2,6 +2,7 @@ class Admin::AlbumsController < ApplicationController
   layout "admin"
   before_action :set_album, only: %i[ show edit update destroy disabled_enabled ]
   before_action :set_album_context, only: %i[ edit new create update]
+  before_action :authenticate_user!
 
   # GET /albums or /albums.json
   def index

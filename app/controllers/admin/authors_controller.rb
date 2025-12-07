@@ -1,6 +1,7 @@
 class Admin::AuthorsController < ApplicationController
   layout "admin"
   before_action :set_author, only: %i[ show edit update destroy ]
+  before_action :authenticate_user!
 
   # GET /authors or /authors.json
   def index
