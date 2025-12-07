@@ -15,11 +15,6 @@
       Este campo es único. Introduce el nombre completo del autor.
     </div>
 
-    <% if author.errors[:full_name].present? %>
-      <div class="invalid-feedback">
-        <%= author.errors[:full_name].to_sentence.capitalize %>
-      </div>
-    <% end %>
   </div>
 
   <div>
