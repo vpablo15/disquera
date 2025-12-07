@@ -29,7 +29,8 @@ class Ability
   def can_manager(user)
     can_product
     can :manage, User
-    cannot [ :destroy, :delete, :index, :create ], User, role: User
+    cannot [ :destroy, :delete, :index, :create, :update, :new ], User, role:
+      User
       .roles[:admin]
   end
 
