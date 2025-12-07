@@ -64,10 +64,10 @@
             <% end %>
           </li>
         <% end %>
-
+        
         <% if can? :index, Sale %>
           <li>
-            <%= link_to sales_path, class: "nav-link text-white rounded-3 mb-1" do %>
+            <%= link_to admin_sales_path, class: "nav-link text-white rounded-3 mb-1" do %>
               <i class="fas fa-chart-line me-2"></i> Ventas
             <% end %>
           </li>
