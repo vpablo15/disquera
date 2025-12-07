@@ -41,3 +41,83 @@ En este módulo, la principal cuestión se determinó por el modelado de los rol
 | **Roles (Autorización)** | Roles Estáticos (`Enums` y permisos definidos en código) | El problema es de alcance pequeño y no requiere extensión dinámica de roles. Se prioriza la simplicidad y practicidad |
 | **Gestión de Sesiones** | Uso de la gema **devise** | Solución estándar para el manejo de usuarios y sesiones |
 | **Manejo de Permisos** | Uso de la gema **cancancan** | Gema bastante reconocida y que permite una implementación robusta y ágil |
+
+---
+
+## 3. Sección de Lanzamiento del Proyecto
+
+Esta sección detalla los requisitos técnicos e instrucciones paso a paso para configurar, construir y ejecutar el proyecto localmente.
+
+### 3.1 Especificaciones Técnicas
+
+El proyecto está desarrollado utilizando las siguientes versiones, definidas en sus respectivos archivos de configuración (`Gemfile` y `package.json`):
+
+* **Lenguaje:** Ruby **3.4.7**
+* **Framework:** Rails **8.1.1**
+* **Node.js:** **20.19.5**
+* **Gestor de Dependencias de Ruby:** Bundler
+* **Gestor de Dependencias de JavaScript:** npm
+
+### 3.2 Base de Datos
+
+El proyecto utiliza **SQLite3**, la base de datos predeterminada que viene incluida con Ruby on Rails.
+* **Base de Datos en Uso:** Se utiliza la base de datos de entorno de desarrollo (`development`).
+* **Instanciación:** No se requiere una instalación o configuración manual de un servicio de base de datos. SQLite3 maneja el archivo de base de datos directamente, instanciándose al ejecutar los comandos de setup.
+
+### 3.3 Instalación y Configuración
+
+Sigue estos pasos para dejar el proyecto operativo:
+
+#### 3.3.1 Obtener el Repositorio
+
+Clona el proyecto y navega al directorio raíz:
+
+```bash
+git clone https://github.com/vpablo15/disquera.git
+cd disquera
+```
+
+#### 3.3.2 Instalar Dependencias de Ruby
+
+Instala todas las gemas especificadas en el Gemfile utilizando Bundler:
+
+```bash
+bundle install
+```
+
+#### 3.3.3 Instalar Dependencias de JavaScript y Construir Assets
+
+Instala las dependencias del frontend y compila los archivos JavaScript necesarios para el asset pipeline:
+
+```bash
+npm install
+npm run build
+```
+
+#### 3.3.4 Configurar la Base de Datos y Correr Semillas
+
+Crea la base de datos y ejecuta las migraciones para estructurar las tablas. Para cargar datos iniciales (semillas), se recomienda el comando `db:reset`:
+
+```bash
+rails db:reset
+```
+
+Si solo quieres ejecutar migraciones y crear el esquema (sin borrar datos):
+
+```bash
+rails db:migrate
+```
+Si solo quieres ejecutar las semillas:
+```bash
+rails db:seed
+```
+
+#### 3.3.5 Iniciar el Servidor de Rails
+
+Una vez completados los pasos anteriores, puedes iniciar el servidor web para acceder a la aplicación:
+
+```bash
+rails server
+```
+
+El proyecto estará accesible en tu navegador, usualmente en `http://localhost:3000`.
