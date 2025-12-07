@@ -53,11 +53,22 @@ successfully created." }
 
   # DELETE /genres/1 or /genres/1.json
   def destroy
-    @genre.destroy!
+    if @genre.albums.any?
+      respond_to do |format|
+        format.html {
+          redirect_to admin_genres_path,
+          alert: "No se puede eliminar el género '#{@genre.name}' porque tiene álbumes asociados. Elimine los álbumes primero."
+        }
+        format.json { head :conflict }
+      end
+    else
 
-    respond_to do |format|
-      format.html { redirect_to admin_genres_path, notice: "Genre was successfully destroyed.", status: :see_other }
-      format.json { head :no_content }
+      @genre.destroy!
+
+      respond_to do |format|
+        format.html { redirect_to admin_genres_path, notice: "Genre was successfully destroyed.", status: :see_other }
+        format.json { head :no_content }
+      end
     end
   end
 

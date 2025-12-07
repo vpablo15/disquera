@@ -52,11 +52,21 @@ class Admin::AuthorsController < ApplicationController
 
   # DELETE /authors/1 or /authors/1.json
   def destroy
-    @author.destroy!
+    if @author.albums.any?
+      respond_to do |format|
+        format.html {
+          redirect_to admin_authors_path,
+          alert: "No se puede eliminar el autor '#{@author.full_name}' porque tiene álbumes asociados. Elimine los álbumes primero."
+        }
+        format.json { head :conflict }
+      end
+    else
+      @author.destroy!
 
-    respond_to do |format|
-      format.html { redirect_to admin_authors_path, notice: "Author was successfully destroyed.", status: :see_other }
-      format.json { head :no_content }
+      respond_to do |format|
+        format.html { redirect_to admin_authors_path, notice: "Author was successfully destroyed.", status: :see_other }
+        format.json { head :no_content }
+      end
     end
   end
 
