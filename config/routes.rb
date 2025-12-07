@@ -2,14 +2,6 @@ Rails.application.routes.draw do
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
   resources :albums, only: [ :index, :show ]
 
-  # Rutas de Ventas
-  resources :sales do
-    member do
-      put :cancel
-      get :invoice
-    end
-  end
-
   # Rutas de Devise
   devise_for :users, controllers: {
     registrations: "users/registrations"
@@ -21,7 +13,12 @@ Rails.application.routes.draw do
     root "admin#home"
     resources :users, only: [ :index, :destroy, :update, :edit, :show ]
     resources :authors
-
+    resources :sales do
+      member do
+        put :cancel
+        get :invoice
+      end
+    end
     resources :albums
     patch "albums/disabled_enabled/:id", to: "albums#disabled_enabled", as: :album_disabled_enabled
   end

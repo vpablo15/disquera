@@ -1,14 +1,14 @@
+<% content_for :admin_content do %>
 <div class="container mt-4">
   <div class="d-flex justify-content-between align-items-center mb-4">
     <h1 class="h3">Nueva Venta</h1>
-    <%= link_to "Volver", sales_path, class: "btn btn-secondary" %>
+    <%= link_to "Volver", admin_sales_path, class: "btn btn-secondary" %>
   </div>
 
   <div class="card shadow-sm">
     <div class="card-body">
 
-      <%= form_with model: @sale, local: true do |f| %>
-
+    <%= form_with model: [:admin, @sale], local: true, data: { turbo: "false" } do |f| %>
         <h3>Agregar Items</h3>
 
         <div class="mb-3">
@@ -40,24 +40,30 @@
           <div class="col-md-4">
             <label class="form-label">Total</label>
             <input type="number"
-                   id="total-field"
-                   class="form-control"
-                   step="0.01"
-                   name="sale[total]"
-                   value="0.00"
-                   readonly>
+              id="total-field"
+              class="form-control"
+              step="0.01"
+              value="0.00"
+              readonly>
           </div>
         </div>
 
         <h4 class="mb-3">Datos del Comprador</h4>
         <div class="row g-3">
           <div class="col-md-6">
-            <%= f.label :buyer_name %>
+            <%= f.label :buyer_id, "DNI del Comprador" %>
+            <%= f.text_field :buyer_id,
+              class: "form-control",
+              required: true,
+              pattern: "\\d{7,8}",
+              title: "El DNI debe tener 7 u 8 dígitos" %>
+          </div>
+          <div class="col-md-6">
+            <%= f.label :buyer_name, "Nombre y Apellido" %>
             <%= f.text_field :buyer_name, class: "form-control" %>
           </div>
-
           <div class="col-md-6">
-            <%= f.label :buyer_contact %>
+            <%= f.label :buyer_contact, "Contacto" %>
             <%= f.text_field :buyer_contact, class: "form-control" %>
           </div>
         </div>
@@ -72,7 +78,8 @@
   </div>
 </div>
 <script>
-  const albums = <%= Album.where(deleted_at: nil)
+  document.addEventListener("turbo:load", function () {
+    const albums = <%= Album.where(deleted_at: nil)
                          .select(:id, :name, :unit_price, :stock_available)
                          .to_json.html_safe %>;
 
@@ -139,7 +146,10 @@
       return;
     }
 
-    const filtered = albums.filter(a => a.name.toLowerCase().includes(term));
+    const filtered = albums.filter(a =>
+      a.stock_available > 0 &&
+      a.name.toLowerCase().includes(term)
+    );
 
     if (filtered.length === 0) {
       results.style.display = "none"
@@ -160,4 +170,7 @@
       results.appendChild(li);
     });
   });
+  })
+  
 </script>
+<% end %>
