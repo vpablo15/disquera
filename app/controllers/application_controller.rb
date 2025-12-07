@@ -9,6 +9,15 @@ class ApplicationController < ActionController::Base
     redirect_back(fallback_location: root_url, alert: exception.message)
   end
 
+  # Redirect to unauthenticated
+  def authenticate_user!
+    unless current_user
+      store_location_for(:user, request.fullpath)
+      redirect_to new_admin_user_session_path, alert: "Debes iniciar sesión para acceder a esta
+página."
+    end
+  end
+
   # Set parameters for gem Devise
   def configure_permitted_parameters
     # allow additional parameters for sign up
