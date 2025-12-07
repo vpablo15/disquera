@@ -76,6 +76,11 @@
 
               <%# Columna de Acciones %>
               <td class="text-center">
+
+                <%= link_to "Ver",
+                  admin_album_path(album),
+                  class: "btn btn-sm btn-info me-1" %>
+
                 <%# Botón para Modificar (Abre el mismo modal de creación) %>
                 <%= link_to "Editar",
                   edit_admin_album_path(album),

@@ -2,20 +2,10 @@
 
 <%= render @album %>
 
-  <div class="d-flex justify-content-between align-items-center mb-4">
+  <div class="d-flex align-items-center mb-4 gap-2">
 
-    <div>
-      <%= link_to "Volver a álbumes", admin_albums_path, class: "btn btn-secondary" %>
-    </div>
+    <%= link_to "Volver a álbumes", admin_albums_path, class: "btn btn-secondary" %>
 
-    <div class="d-flex gap-2">
-      <%= link_to "Editar este álbum", edit_admin_album_path(@album), class: "btn btn-warning" %>
-
-      <%= button_to "Eliminar este álbum",
-        [:admin, @album],
-        method: :delete,
-        data: { confirm: "¿Estás seguro de que quieres eliminar este álbum?" },
-        class: "btn btn-danger" %>
-    </div>
+    <%= link_to "Editar este álbum", edit_admin_album_path(@album), class: "btn btn-warning" %>
   </div>
 <% end %>
