@@ -10,7 +10,7 @@
    - [2.2. Sección de Administración](#22-sección-de-administración)
 
 
-3. [URL de Admin y Front](#3-url-de-admin-y-front)
+3. [URL de Admin y Front](#3-url-admin-y-front)
 
 
 ## 1. Lanzamiento del Proyecto
@@ -138,7 +138,7 @@ En este módulo, la principal cuestión se determinó por el modelado de los rol
 
 ---
 
-# 3 Url Admin y front-store
+# 3 URL Admin y front
 El proyecto estará accesible en el navegador, usualmente en `http://localhost:3000`.
 * **Admin**: http://localhost:3000/admin
 * **Front**: http://localhost:3000
