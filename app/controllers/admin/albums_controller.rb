@@ -3,6 +3,7 @@ class Admin::AlbumsController < ApplicationController
   before_action :set_album, only: %i[ show edit update destroy disabled_enabled ]
   before_action :set_album_context, only: %i[ edit new create update]
   before_action :authenticate_user!
+  load_and_authorize_resource class: "Album"
 
   # GET /albums or /albums.json
   def index
