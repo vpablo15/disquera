@@ -39,6 +39,6 @@ class Ability
   end
 
   def can_all_users(user)
-    can [ :show, :edit, :update ], User, id: user.id
+    can [ :edit, :update ], User, id: user.id
   end
 end
