@@ -12,14 +12,15 @@
   </div>
 
   <%# Sección de Búsqueda y Filtro %>
-  <div class="mb-4">
-    <%= form_with url: admin_albums_path, method: :get, class: "d-flex" do %>
-      <%= text_field_tag :query, params[:query],
+<!--  <div class="mb-4">-->
+    <%#= form_with url: admin_albums_path, method: :get, class: "d-flex" do %>
+      <%#= text_field_tag :query, params[:query],
         placeholder: "Buscar por nombre, código o autor...",
         class: "form-control me-2" %>
-      <%= button_tag "Buscar", type: "submit", class: "btn btn-outline-secondary" %>
-    <% end %>
-  </div>
+      <%#= button_tag "Buscar", type: "submit", class: "btn
+      btn-outline-secondary" %>
+    <%# end %>
+<!--  </div>-->
 
   <%# Tabla de Discos %>
   <div class="card shadow-lg border-0">
