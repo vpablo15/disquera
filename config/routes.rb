@@ -11,9 +11,7 @@ Rails.application.routes.draw do
   end
 
   # Rutas de Devise
-  devise_for :users, controllers: {
-    registrations: "users/registrations"
-  }
+  devise_for :user, only: :sessions
 
   # Admin
   namespace :admin do
