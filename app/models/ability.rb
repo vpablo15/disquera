@@ -5,7 +5,9 @@ class Ability
 
   def initialize(user)
     # For guest user
-    user ||= User.new
+    if user.nil?
+      return
+    end
 
     can_all_users(user)
 
