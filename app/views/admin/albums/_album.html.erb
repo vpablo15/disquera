@@ -17,7 +17,7 @@
       <div class="col-md-5">
         <h4 class="border-bottom pb-2 mb-3">Detalles del Álbum</h4>
 
-        <dl class="row mb-4">
+        <div class="row mb-4">
           <dt class="col-sm-6">Descripción:</dt>
           <dd class="col-sm-6"><%= album.description %></dd>
 
@@ -52,9 +52,10 @@
 
           <% if album.deleted_at.present? %>
             <dt class="col-sm-6 text-danger">Eliminado en:</dt>
-            <dd class="col-sm-6 text-danger"><%= l(album.deleted_at, format: :long) %></dd>
+            <dd class="col-sm-6 text-danger"><%= (album.deleted_at, format=
+              :long) %></dd>
           <% end %>
-        </dl>
+        </div>
 
         <h4 class="border-bottom pb-2 mb-3 mt-4">Pista de Audio</h4>
         <% if album.audio&.clip&.attached? %>
