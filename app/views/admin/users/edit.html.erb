@@ -3,13 +3,14 @@
     <div class="row justify-content-center">
       <div class="col-md-8 col-lg-6">
 
-        <h2 class="mb-4 text-center">Editar Cuenta de Administrador para <%= @user.email %></h2>
+        <h2 class="mb-4 text-center">Editar perfil: <%= @user.email %></h2>
 
         <%= form_with(model: @user, url: admin_user_path(@user), local: true, class: "card p-4 shadow") do |form| %>
 
           <%= render "shared/error_display", resource: form.object %>
 
-          <h3 class="border-bottom pb-2 mb-3 text-primary">Información Sensible (Devise)</h3>
+          <h3 class="border-bottom pb-2 mb-3 text-primary">Información de
+            perfil</h3>
 
           <div class="mb-3">
             <%= form.label :email, class: "form-label" %>
