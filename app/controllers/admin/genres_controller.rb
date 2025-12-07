@@ -1,6 +1,8 @@
 class Admin::GenresController < ApplicationController
   layout "admin"
   before_action :set_genre, only: %i[ show edit update destroy ]
+  before_action :authenticate_user!
+  load_and_authorize_resource class: "Genre"
 
   # GET /genres or /genres.json
   def index

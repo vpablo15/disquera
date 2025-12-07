@@ -25,20 +25,26 @@ class Ability
   end
 
   def can_manager(user)
-    # can :manage, Product
-    # can :manage, Sale
+    can_product
     can :manage, User
     cannot [ :destroy, :delete, :index, :create ], User, role: User
       .roles[:admin]
   end
 
   def can_employee(user)
-    # Empleado: puede ver productos y ventas
-    # can :read, Product
-    # can :read, Sale
+    can_product
   end
+
+  def can_product
+    can :manage, Album
+    can :manage, Author
+    can :manage, Genre
+    can :manage, Sale
+  end
+
 
   def can_all_users(user)
     can [ :show, :edit, :update ], User, id: user.id
   end
+
 end

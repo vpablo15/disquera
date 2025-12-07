@@ -16,6 +16,13 @@
               <i class="fas fa-user-circle me-1"></i> <%= current_user.email.split('@').first %>
             </button>
             <ul class="dropdown-menu dropdown-menu-end shadow border-0">
+
+              <li>
+                <%= link_to admin_user_path(current_user), class: "dropdown-item" do %>
+                  <i class="fas fa-cog me-2"></i> Ver perfil
+                <% end %>
+              </li>
+              <li><hr class="dropdown-divider"></li>
               <li>
                 <%= link_to edit_admin_user_path(current_user), class: "dropdown-item" do %>
                   <i class="fas fa-cog me-2"></i> Editar Perfil
@@ -50,42 +57,48 @@
 
       <ul class="nav nav-pills flex-column mb-auto">
 
-        <li>
-          <%= link_to admin_users_path, class: "nav-link text-white rounded-3 mb-1" do %>
-            <i class="fas fa-users me-2"></i> Usuarios
-          <% end %>
-        </li>
+        <% if can? :index, User %>
+          <li>
+            <%= link_to admin_users_path, class: "nav-link text-white rounded-3 mb-1" do %>
+              <i class="fas fa-users me-2"></i> Usuarios
+            <% end %>
+          </li>
+        <% end %>
+        
+        <% if can? :index, Sale %>
+          <li>
+            <%= link_to admin_sales_path, class: "nav-link text-white rounded-3 mb-1" do %>
+              <i class="fas fa-chart-line me-2"></i> Ventas
+            <% end %>
+          </li>
+        <% end %>
 
-        <li>
-          <%= link_to admin_sales_path, class: "nav-link text-white rounded-3 mb-1" do %>
-            <i class="fas fa-chart-line me-2"></i> Ventas
-          <% end %>
-        </li>
-
-        <li>
-          <a href="#productos-collapse" class="nav-link text-white rounded-3 mb-1 collapsed" data-bs-toggle="collapse" aria-expanded="false">
-            <i class="fas fa-box-open me-2"></i> Productos
-          </a>
-          <div class="collapse" id="productos-collapse">
-            <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 ps-3">
-              <li>
-                <%= link_to admin_albums_path, class: "nav-link text-white rounded-3 small py-1" do %>
-                  <i class="fas fa-boxes me-2"></i> Álbumes
-                <% end %>
-              </li>
-              <li>
-                <%= link_to admin_authors_path, class: "nav-link text-white rounded-3 small py-1" do %>
-                  <i class="fas fa-user-tag me-2"></i> Autores
-                <% end %>
-              </li>
-              <li>
-                <%= link_to admin_genres_path, class: "nav-link text-white rounded-3 small py-1" do %>
-                  <i class="fas fa-tags me-2"></i> Géneros
-                <% end %>
-              </li>
-            </ul>
-          </div>
-        </li>
+        <% if can? :index, Album, Author, Genre %>
+          <li>
+            <a href="#productos-collapse" class="nav-link text-white rounded-3 mb-1 collapsed" data-bs-toggle="collapse" aria-expanded="false">
+              <i class="fas fa-box-open me-2"></i> Productos
+            </a>
+            <div class="collapse" id="productos-collapse">
+              <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 ps-3">
+                <li>
+                  <%= link_to admin_albums_path, class: "nav-link text-white rounded-3 small py-1" do %>
+                    <i class="fas fa-boxes me-2"></i> Álbumes
+                  <% end %>
+                </li>
+                <li>
+                  <%= link_to admin_authors_path, class: "nav-link text-white rounded-3 small py-1" do %>
+                    <i class="fas fa-user-tag me-2"></i> Autores
+                  <% end %>
+                </li>
+                <li>
+                  <%= link_to admin_genres_path, class: "nav-link text-white rounded-3 small py-1" do %>
+                    <i class="fas fa-tags me-2"></i> Géneros
+                  <% end %>
+                </li>
+              </ul>
+            </div>
+          </li>
+        <% end %>
 
         <li><hr></li> </ul>
 

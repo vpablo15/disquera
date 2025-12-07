@@ -2,6 +2,8 @@ class Admin::SalesController < ApplicationController
   layout "admin"
   before_action :authenticate_user!
   before_action :set_sale, only: [:show, :edit, :update, :destroy, :cancel, :invoice]
+  before_action :authenticate_user!
+  load_and_authorize_resource class: "Sale"
 
   def index
     @sales = Sale.all
