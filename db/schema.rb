@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2025_12_03_224639) do
+ActiveRecord::Schema[8.1].define(version: 2025_12_06_213536) do
   create_table "active_storage_attachments", force: :cascade do |t|
     t.bigint "blob_id", null: false
     t.datetime "created_at", null: false
@@ -99,6 +99,7 @@ ActiveRecord::Schema[8.1].define(version: 2025_12_03_224639) do
 
   create_table "sales", force: :cascade do |t|
     t.string "buyer_contact"
+    t.string "buyer_id"
     t.string "buyer_name"
     t.boolean "cancelled", default: false
     t.datetime "created_at", null: false

@@ -1,4 +1,6 @@
-class SalesController < ApplicationController
+class Admin::SalesController < ApplicationController
+  layout "admin"
+  before_action :authenticate_user!
   before_action :set_sale, only: [:show, :edit, :update, :destroy, :cancel, :invoice]
 
   def index
@@ -29,14 +31,13 @@ class SalesController < ApplicationController
 
     ActiveRecord::Base.transaction do
       @sale.total = 0
-      @sale.save!
 
       sale_items_params.each do |item|
         album = Album.find(item[:album_id])
 
         raise "No hay stock suficiente para #{album.name}" if album.stock_available < item[:quantity].to_i
 
-        @sale.sale_items.create!(
+        @sale.sale_items.build(
           album: album,
           quantity: item[:quantity].to_i,
           price: album.unit_price,
@@ -51,21 +52,18 @@ class SalesController < ApplicationController
       @sale.save!
     end
 
-    redirect_to sales_path, notice: "Venta creada correctamente."
-
-  rescue => e
-    flash[:alert] = "No se pudo crear la venta: #{e.message}"
-    render :new, status: :unprocessable_entity
+    redirect_to admin_sales_path, notice: "Venta creada correctamente."
+    rescue => e
+      flash[:alert] = "No se pudo crear la venta: #{e.message}"
+      render :new, status: :unprocessable_entity
   end
-
-
 
   def edit
   end
 
   def update
     if @sale.update(sale_params)
-      redirect_to sales_path, notice: "Venta actualizada."
+      redirect_to admin_sales_path, notice: "Venta actualizada."
     else
       render :edit, status: :unprocessable_entity
     end
@@ -73,12 +71,12 @@ class SalesController < ApplicationController
 
   def destroy
     @sale.destroy
-    redirect_to sales_path, notice: "Venta eliminada."
+    redirect_to admin_sales_path, notice: "Venta eliminada."
   end
 
   def cancel
     if @sale.cancelled?
-      redirect_to sales_path, alert: "La venta ya está cancelada."
+      redirect_to admin_sales_path, alert: "La venta ya está cancelada."
       return
     end
 
@@ -91,35 +89,7 @@ class SalesController < ApplicationController
       @sale.update!(cancelled: true)
     end
 
-    redirect_to sales_path, notice: "Venta cancelada correctamente."
-  end
-
-
-  def invoice
-    pdf = Prawn::Document.new
-
-    pdf.text "Factura ##{@sale.id}", size: 22, style: :bold
-    pdf.move_down 20
-
-    pdf.text "Fecha: #{(@sale.sale_date || Time.current).strftime('%d/%m/%Y %H:%M')}"
-    pdf.text "Cliente: #{@sale.buyer_name}"
-    pdf.text "Contacto: #{@sale.buyer_contact.presence || '-'}"
-    pdf.move_down 20
-
-    pdf.text "Detalle de Items", style: :bold
-    pdf.move_down 10
-
-    @sale.sale_items.each do |item|
-      pdf.text "- #{item.product_name} (#{item.quantity})  $#{item.price}"
-    end
-
-    pdf.move_down 20
-    pdf.text "Total: $#{@sale.total}", size: 16, style: :bold
-
-    send_data pdf.render,
-      filename: "factura_#{@sale.id}.pdf",
-      type: "application/pdf",
-      disposition: "inline"
+    redirect_to admin_sales_path, notice: "Venta cancelada correctamente."
   end
 
   def invoice
@@ -164,9 +134,9 @@ class SalesController < ApplicationController
 
   def sale_params
     params.require(:sale).permit(
+      :buyer_id,
       :buyer_name,
       :buyer_contact,
-      :total,
       :cancelled,
       :user_id
     )

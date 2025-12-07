@@ -2,14 +2,6 @@ Rails.application.routes.draw do
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
   resources :albums, only: [ :index, :show ]
 
-  # Rutas de Ventas
-  resources :sales do
-    member do
-      put :cancel
-      get :invoice
-    end
-  end
-
   # Rutas de Devise
   devise_for :user, only: :sessions
 
@@ -20,6 +12,12 @@ Rails.application.routes.draw do
     resources :users, only: [ :index, :destroy, :update, :edit, :show, :new,
       :create ]
     resources :authors
+    resources :sales do
+      member do
+        put :cancel
+        get :invoice
+      end
+    end
     resources :user_session, only: [ :new ]
 
     resources :albums
