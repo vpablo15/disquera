@@ -5,10 +5,4 @@
 
 <%= render "form", album: @album, authors: @authors, genres: @genres %>
 
-<br>
-
-<div>
-  <%= link_to "Show this album", admin_album_path(@album) %> |
-  <%= link_to "Back to albums", admin_albums_path %>
-</div>
 <% end %>

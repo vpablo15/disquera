@@ -45,7 +45,7 @@ class Admin::AlbumsController < ApplicationController
         @album.create_audio! do |audio| audio.clip.attach(audio_file[:clip])
         end
       end
-      redirect_to @album, notice: 'Álbum creado exitosamente.'
+      redirect_to admin_album_path(@album), notice: 'Álbum creado exitosamente.'
     else render :new, status: :unprocessable_entity
     end
   rescue StandardError => e

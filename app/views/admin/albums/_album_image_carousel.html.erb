@@ -1,0 +1,35 @@
+<%
+  # La corrección está en el uso de .metadata
+  cover_image = album.images.find { |image| image.is_cover == true }
+
+  other_images = album.images.reject { |image| image == cover_image }
+
+  all_images = [cover_image].compact + other_images
+%>
+
+<div id="albumCarousel" class="carousel slide" data-bs-ride="carousel">
+  <div class="carousel-inner">
+    <% all_images.each_with_index do |image, index| %>
+      <div class="carousel-item <%= 'active' if index == 0 %>">
+        <%= image_tag image.photo, class: "d-block w-100 rounded", style:
+          "height: 400px; object-fit: cover;", alt: "Imagen del Álbum #{index + 1}" %>
+        <% if index == 0 && image == cover_image %>
+          <div class="carousel-caption d-none d-md-block bg-dark bg-opacity-75 rounded p-1">
+            <p class="mb-0 fw-bold">Portada del Álbum</p>
+          </div>
+        <% end %>
+      </div>
+    <% end %>
+  </div>
+
+  <% if all_images.size > 1 %>
+    <button class="carousel-control-prev" type="button" data-bs-target="#albumCarousel" data-bs-slide="prev">
+      <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+      <span class="visually-hidden">Anterior</span>
+    </button>
+    <button class="carousel-control-next" type="button" data-bs-target="#albumCarousel" data-bs-slide="next">
+      <span class="carousel-control-next-icon" aria-hidden="true"></span>
+      <span class="visually-hidden">Siguiente</span>
+    </button>
+  <% end %>
+</div>

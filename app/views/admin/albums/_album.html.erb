@@ -1,52 +1,71 @@
-<div id="<%= dom_id album %>">
-  <div>
-    <strong>Name:</strong>
-    <%= album.name %>
+<div class="card shadow-sm mb-4" id="<%= dom_id album %>">
+  <div class="card-header bg-primary text-white">
+    <h3 class="mb-0"><%= album.name %></h3>
   </div>
 
-  <div>
-    <strong>Description:</strong>
-    <%= album.description %>
-  </div>
+  <div class="card-body">
+    <div class="row">
 
-  <div>
-    <strong>Unit price:</strong>
-    <%= album.unit_price %>
-  </div>
+      <div class="col-md-7 mb-4">
+        <% if album.images.any? %>
+          <%= render 'album_image_carousel', album: album %>
+        <% else %>
+          <div class="alert alert-info text-center">No hay imágenes disponibles para este álbum.</div>
+        <% end %>
+      </div>
 
-  <div>
-    <strong>Stock available:</strong>
-    <%= album.stock_available %>
-  </div>
+      <div class="col-md-5">
+        <h4 class="border-bottom pb-2 mb-3">Detalles del Álbum</h4>
 
-  <div>
-    <strong>Género:</strong>
-    <%= album.genre_id %>
-  </div>
+        <dl class="row mb-4">
+          <dt class="col-sm-6">Descripción:</dt>
+          <dd class="col-sm-6"><%= album.description %></dd>
 
-  <div>
-    <strong>Año:</strong>
-    <%= album.year %>
-  </div>
+          <dt class="col-sm-6">Precio Unitario:</dt>
+          <dd class="col-sm-6 fw-bold text-success"><%= number_to_currency(album.unit_price) %></dd>
 
-  <div>
-    <strong>Media type:</strong>
-    <%= album.media_type %>
-  </div>
+          <dt class="col-sm-6">Stock Disponible:</dt>
+          <dd class="col-sm-6">
+            <span class="badge bg-<%= album.stock_available > 0 ? 'success' : 'danger' %>">
+              <%= album.stock_available %>
+            </span>
+          </dd>
 
-  <div>
-    <strong>Condition is new:</strong>
-    <%= album.condition_is_new %>
-  </div>
+          <dt class="col-sm-6">Género:</dt>
+          <dd class="col-sm-6"><%= album.genre_id %></dd>
 
-  <div>
-    <strong>Author:</strong>
-    <%= album.author_id %>
-  </div>
+          <dt class="col-sm-6">Año:</dt>
+          <dd class="col-sm-6"><%= album.year %></dd>
 
-  <div>
-    <strong>Deleted at:</strong>
-    <%= album.deleted_at %>
-  </div>
+          <dt class="col-sm-6">Tipo de Medio:</dt>
+          <dd class="col-sm-6"><%= album.media_type %></dd>
 
+          <dt class="col-sm-6">Condición:</dt>
+          <dd class="col-sm-6">
+            <span class="badge bg-<%= album.condition_is_new ? 'info' : 'secondary' %>">
+              <%= album.condition_is_new ? 'Nuevo' : 'Usado' %>
+            </span>
+          </dd>
+
+          <dt class="col-sm-6">Autor ID:</dt>
+          <dd class="col-sm-6"><%= album.author_id %></dd>
+
+          <% if album.deleted_at.present? %>
+            <dt class="col-sm-6 text-danger">Eliminado en:</dt>
+            <dd class="col-sm-6 text-danger"><%= l(album.deleted_at, format: :long) %></dd>
+          <% end %>
+        </dl>
+
+        <h4 class="border-bottom pb-2 mb-3 mt-4">Pista de Audio</h4>
+        <% if album.audio&.clip&.attached? %>
+          <audio controls class="w-100">
+            <source src="<%= rails_blob_url(album.audio.clip) %>" type="<%= album.audio.clip.content_type %>">
+            Tu navegador no soporta el elemento de audio.
+          </audio>
+        <% else %>
+          <div class="alert alert-warning">No hay pista de audio disponible.</div>
+        <% end %>
+      </div>
+    </div>
+  </div>
 </div>
