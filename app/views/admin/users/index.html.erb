@@ -4,7 +4,8 @@
       <i class="fas fa-users me-2"></i> Listado de Usuarios
     </h2>
     <% if can? :create, User %>
-      <%= link_to "Crear Nuevo Usuario", new_user_registration_path, class: "btn btn-primary" %>
+      <%= link_to "Crear Nuevo Usuario", new_admin_user_path, class: "btn
+      btn-primary" %>
     <% end %>
   </div>
 

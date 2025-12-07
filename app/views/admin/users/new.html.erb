@@ -1,0 +1,52 @@
+<% content_for :admin_content do %>
+  <div class="container my-5">
+    <div class="row justify-content-center">
+      <div class="col-md-8 col-lg-5">
+
+        <div class="card shadow-lg p-4">
+          <h2 class="card-title text-center mb-4">Registro de Usuario</h2>
+
+          <%= form_for(@user, url: admin_users_path(@user)) do |f| %>
+
+            <%= render "shared/error_display", resource: f.object %>
+
+            <div class="mb-3">
+              <%= f.label :email, class: "form-label" %>
+              <%= f.email_field :email, autofocus: true, autocomplete: "email", class: "form-control", placeholder: "ejemplo@dominio.com" %>
+            </div>
+
+            <div class="mb-3">
+              <%= f.label :password, class: "form-label" %>
+              <% if @minimum_password_length %>
+                <em class="text-muted small ms-2">(<%= @minimum_password_length %>
+                  caracteres mínimo)</em>
+              <% end %>
+              <%= f.password_field :password, autocomplete: "new-password", class: "form-control" %>
+            </div>
+
+            <div class="mb-3">
+              <%= f.label :password_confirmation, class: "form-label" %>
+              <%= f.password_field :password_confirmation, autocomplete: "new-password", class: "form-control" %>
+            </div>
+
+            <div class="mb-3">
+              <%= f.label :role, "Selecciona tu Rol", class: "form-label" %>
+              <% allowed_roles = User.roles.keys.select do |k| can? :create, User.new(role: User.roles[k])
+              end
+                 select_options = allowed_roles.map { |k| [ k.humanize, k ] } %>
+
+              <%= f.select :role, select_options, { selected: f.object.role || :basic }, { class: "form-select" } %>
+            </div>
+
+
+            <div class="d-grid gap-2 mt-4">
+              <%= f.submit "Registrarse", class: "btn btn-success btn-lg" %>
+            </div>
+          <% end %>
+
+        </div>
+
+      </div>
+    </div>
+  </div>
+<% end %>

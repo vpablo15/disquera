@@ -43,7 +43,8 @@ correctamente."
       :role)
   end
 
-  def edit
+  def new
+    @user = User.new
   end
 
   def destroy
@@ -57,6 +58,10 @@ correctamente."
     else
       redirect_to admin_users_path, alert: "No se pudo eliminar al usuario."
     end
+  end
+
+  def register
+
   end
 
   private
