@@ -89,24 +89,29 @@
 
   <div class="d-flex gap-2 justify-content-start mt-4">
 
-    <%# Volver (Principal y a la izquierda) %>
-    <%= link_to admin_users_path, class: "btn btn-outline-secondary" do %>
-      <i class="fas fa-arrow-left me-1"></i> Volver a Usuarios
+    <% if can? :index, User %>
+      <%= link_to admin_users_path, class: "btn btn-outline-secondary" do %>
+        <i class="fas fa-arrow-left me-1"></i> Volver a Usuarios
+      <% end %>
     <% end %>
 
-    <div class="ms-auto d-flex gap-2">
-      <%# Editar (Como admin) %>
-      <%= link_to edit_admin_user_path(@user), class: "btn btn-warning" do %>
-        <i class="fas fa-pencil-alt me-1"></i> Editar Usuario
-      <% end %>
+    <% if can? :edit, User %>
+      <div class="ms-auto d-flex gap-2">
+        <%# Editar (Como admin) %>
+        <%= link_to edit_admin_user_path(@user), class: "btn btn-warning" do %>
+          <i class="fas fa-pencil-alt me-1"></i> Editar Perfil
+        <% end %>
+    <% end %>
 
-      <%# Eliminar (Como admin) %>
-      <%= button_to [:admin, @user],
-        method: :delete,
-        data: { turbo_confirm: "¿Estás seguro de que quieres eliminar al usuario '#{@user.email}'?" },
-        class: "btn btn-danger" do %>
-        <i class="fas fa-trash-alt me-1"></i> Eliminar Usuario
+
+    <% if can? :destroy, User %>
+      <%= link_to admin_user_path(@user), data: { turbo_method:
+        :delete, turbo_confirm: "¿Estás seguro de que quieres eliminar a
+#{@user.email} y #{@user.id}?", }, class: "btn  btn-danger" do %>
+      <i class="fas fa-pencil-alt me-1"></i> Eliminar
       <% end %>
     </div>
+    <% end %>
+
   </div>
 <% end %>
