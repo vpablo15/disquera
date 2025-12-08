@@ -184,7 +184,7 @@
   <%# El campo deleted_at se omite intencionalmente ya que no debería ser manipulado por el usuario en esta vista. %>
 
   <div class="w-100 d-flex justify-content-end flex-row gap-2">
-    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+    <%= link_to "Cancelar", admin_albums_path, class:"btn btn-secondary" %>
     <%= f.submit album.persisted? ? "Guardar Cambios" : "Crear Disco", class: "btn btn-primary" %>
   </div>
 <% end %>
